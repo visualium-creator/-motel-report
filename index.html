@@ -691,8 +691,8 @@ function updateFinalSummary(){
 function renderNotesClaims(){
   const d=getData(),rn=[],rc=[];
   Object.entries(d.rooms).forEach(([rid,sales])=>{sales.forEach(s=>{if(s.cancelled)return;if(s.note?.trim())rn.push({roomId:rid,text:s.note,source:'room'});if(s.claim?.trim())rc.push({roomId:rid,text:s.claim,source:'room'});});});
-  const an=[...rn,...(d.notes||[]).map(n=>({...n,source:'extra'}))];
-  const ac=[...rc,...(d.claims||[]).map(c=>({...c,source:'extra'}))];
+  const an=[...rn,...(d.notes||[]).map(n=>({...n,source:n.source||'extra'}))];
+  const ac=[...rc,...(d.claims||[]).map(c=>({...c,source:c.source||'extra'}))];
   document.getElementById('note-count').textContent=an.length+'건';
   document.getElementById('note-items').innerHTML=an.length===0?'<div class="empty-nc">입력된 특이사항이 없습니다</div>'
     :an.map((n,i)=>{const bc=n.source==='room'?'note-badge':'direct-badge';const bt=n.source==='room'?n.roomId+'호':'직접';return `<div class="nc-item"><span class="nc-room-badge ${bc}">${bt}</span><span class="nc-text">${n.text}</span>${n.source==='extra'&&!LOCKED?`<button class="nc-del" onclick="delExtra('note',${i},${rn.length})">✕</button>`:''}</div>`;}).join('');
@@ -700,8 +700,8 @@ function renderNotesClaims(){
   document.getElementById('claim-items').innerHTML=ac.length===0?'<div class="empty-nc">입력된 클레임이 없습니다</div>'
     :ac.map((c,i)=>{const bc=c.source==='room'?'claim-badge':'direct-badge';const bt=c.source==='room'?c.roomId+'호':'직접';return `<div class="nc-item"><span class="nc-room-badge ${bc}">${bt}</span><span class="nc-text">${c.text}</span>${c.source==='extra'&&!LOCKED?`<button class="nc-del" onclick="delExtra('claim',${i},${rc.length})">✕</button>`:''}</div>`;}).join('');
 }
-function addNoteDirectly(){if(LOCKED)return;const roomId=document.getElementById('note-room-sel').value;const text=document.getElementById('note-input').value.trim();if(!text)return;const dbN=loadDb();const kN=getKey();if(!dbN[kN].notes)dbN[kN].notes=[];dbN[kN].notes.push({roomId:roomId==='direct'?'':roomId,text});saveDb(dbN);document.getElementById('note-input').value='';renderNotesClaims();}
-function addClaimDirectly(){if(LOCKED)return;const roomId=document.getElementById('claim-room-sel').value;const text=document.getElementById('claim-input').value.trim();if(!text)return;const dbCl=loadDb();const kCl=getKey();if(!dbCl[kCl].claims)dbCl[kCl].claims=[];dbCl[kCl].claims.push({roomId:roomId==='direct'?'':roomId,text});saveDb(dbCl);document.getElementById('claim-input').value='';renderNotesClaims();}
+function addNoteDirectly(){if(LOCKED)return;const roomId=document.getElementById('note-room-sel').value;const text=document.getElementById('note-input').value.trim();if(!text)return;const dbN=loadDb();const kN=getKey();if(!dbN[kN].notes)dbN[kN].notes=[];const src=roomId==='direct'?'extra':'room';dbN[kN].notes.push({roomId:roomId==='direct'?'':roomId,text,source:src});saveDb(dbN);document.getElementById('note-input').value='';renderNotesClaims();}
+function addClaimDirectly(){if(LOCKED)return;const roomId=document.getElementById('claim-room-sel').value;const text=document.getElementById('claim-input').value.trim();if(!text)return;const dbCl=loadDb();const kCl=getKey();if(!dbCl[kCl].claims)dbCl[kCl].claims=[];const src=roomId==='direct'?'extra':'room';dbCl[kCl].claims.push({roomId:roomId==='direct'?'':roomId,text,source:src});saveDb(dbCl);document.getElementById('claim-input').value='';renderNotesClaims();}
 function delExtra(type,allIdx,roomCount){if(LOCKED)return;const dbD=loadDb();const kD=getKey();const ei=allIdx-roomCount;if(type==='note')dbD[kD].notes.splice(ei,1);else dbD[kD].claims.splice(ei,1);saveDb(dbD);renderNotesClaims();}
 async function submitReport(){
   if(LOCKED)return;
