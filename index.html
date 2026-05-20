@@ -71,9 +71,14 @@ input,select,textarea,button{font-family:inherit}
 .chip-재숙{background:#EDE9FE;color:#5B21B6}
 .empty-room{height:58px}
 .section-title{font-size:11px;font-weight:700;color:var(--text3);margin:1rem 0 5px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);padding-bottom:3px}
-.exp-wrap{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px}
-.exp-header{display:grid;grid-template-columns:2fr 1.2fr 1fr 28px;gap:6px;font-size:10px;font-weight:600;color:var(--text3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
-.exp-row{display:grid;grid-template-columns:2fr 1.2fr 1fr 28px;gap:6px;align-items:center;margin-bottom:5px}
+.exp-wrap{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px}
+.exp-item{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border);font-size:12px}
+.exp-item:last-child{border-bottom:none}
+.exp-item-left{display:flex;gap:8px;align-items:center}
+.exp-item-name{color:var(--text);font-weight:500}
+.exp-item-type{font-size:10px;padding:1px 6px;border-radius:3px;font-weight:600}
+.exp-item-amt{color:var(--text);font-weight:600}
+.exp-row{display:grid;grid-template-columns:2fr 1.2fr 1fr auto;gap:6px;align-items:center;margin-bottom:5px}
 .exp-row input,.exp-row select{font-size:12px;padding:5px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text);width:100%;ime-mode:active}
 .exp-row input:disabled,.exp-row select:disabled{opacity:.5;cursor:not-allowed;background:var(--bg2)}
 .add-btn{font-size:12px;padding:5px 12px;border-radius:7px;border:1.5px dashed var(--border2);background:var(--bg2);color:var(--text3);cursor:pointer}
@@ -218,9 +223,19 @@ input,select,textarea,button{font-family:inherit}
   <div id="floors"></div>
   <div class="section-title">지출내역</div>
   <div class="exp-wrap">
-    <div class="exp-header"><div>항목</div><div>금액</div><div>형태</div><div></div></div>
-    <div id="expenses"></div>
-    <button class="add-btn" id="add-exp-btn" onclick="addExpense()" style="margin-top:2px">+ 지출 추가</button>
+    <div class="nc-input-area" id="exp-input-area">
+      <div class="exp-row" style="margin-bottom:0">
+        <input class="exp-name" type="text" id="exp-name-input" placeholder="지출항목" ime-mode="active">
+        <input class="exp-amt" type="number" id="exp-amt-input" placeholder="금액" step="1000">
+        <select class="exp-type" id="exp-type-input">
+          <option value="">형태</option>
+          <option value="현금">현금</option>
+          <option value="카드">카드</option>
+        </select>
+        <button class="nc-add-btn" id="add-exp-btn" onclick="addExpenseItem()">추가</button>
+      </div>
+    </div>
+    <div class="nc-items" id="expenses"><div class="empty-nc">입력된 지출내역이 없습니다</div></div>
   </div>
   <div class="section-title">특이사항 & 클레임</div>
   <div class="nc-grid">
@@ -283,10 +298,11 @@ input,select,textarea,button{font-family:inherit}
 <script>
 
 const PW = '1234'; // 비밀번호 여기서 변경
+function getTodayStr(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
 function checkPw(){
   const input = document.getElementById('pw-input').value;
   if(input === PW){
-    localStorage.setItem('motelAuth', btoa(PW + '_' + new Date().toDateString()));
+    localStorage.setItem('motelAuth', PW + '_' + getTodayStr());
     document.getElementById('pw-overlay').style.display = 'none';
     document.getElementById('pw-input').value = '';
   } else {
@@ -297,7 +313,7 @@ function checkPw(){
 }
 function checkAuth(){
   const auth = localStorage.getItem('motelAuth');
-  const expected = btoa(PW + '_' + new Date().toDateString());
+  const expected = PW + '_' + getTodayStr();
   if(auth !== expected){
     document.getElementById('pw-overlay').style.display = 'flex';
   } else {
@@ -418,7 +434,7 @@ function applyLockUI(){
   else banner.classList.remove('show');
   ['s-am','s-day','s-night'].forEach(id=>document.getElementById(id).disabled=LOCKED);
   document.getElementById('add-exp-btn').disabled=LOCKED;
-  document.querySelectorAll('#expenses .exp-row input,#expenses .exp-row select,#expenses .exp-row button').forEach(el=>el.disabled=LOCKED);
+  const expArea=document.getElementById('exp-input-area');if(expArea){LOCKED?expArea.classList.add('locked'):expArea.classList.remove('locked');}document.getElementById('add-exp-btn').disabled=LOCKED;
   ['note-input-area','claim-input-area'].forEach(id=>{const el=document.getElementById(id);LOCKED?el.classList.add('locked'):el.classList.remove('locked');});
   const btn=document.getElementById('btn-submit'),status=document.getElementById('submit-status'),info=document.getElementById('submit-info');
   document.getElementById('submit-title').textContent=`${currentHotel} ${getDate()} 보고서 제출`;
@@ -429,13 +445,7 @@ function switchTab(hotel){
   if(!LOCKED){
     const db=loadDb();const k=getKey();
     if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};
-    db[k].expenses=[];
-    document.querySelectorAll('#expenses .exp-row').forEach(row=>{
-      const name=row.querySelector('.exp-name')?.value||'';
-      const amt=Number(row.querySelector('.exp-amt')?.value||0);
-      const type=row.querySelector('.exp-type')?.value||'';
-      if(name||amt)db[k].expenses.push({name,amt,type});
-    });
+    // expenses already saved in db
     db[k].staff.am=document.getElementById('s-am').value;
     db[k].staff.day=document.getElementById('s-day').value;
     db[k].staff.night=document.getElementById('s-night').value;
@@ -453,13 +463,7 @@ document.getElementById('date-sel').addEventListener('change',function(){
     // 이전 날짜 키로 저장
     const db=loadDb();
     if(!db[prevKey])db[prevKey]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};
-    db[prevKey].expenses=[];
-    document.querySelectorAll('#expenses .exp-row').forEach(row=>{
-      const name=row.querySelector('.exp-name')?.value||'';
-      const amt=Number(row.querySelector('.exp-amt')?.value||0);
-      const type=row.querySelector('.exp-type')?.value||'';
-      if(name||amt)db[prevKey].expenses.push({name,amt,type});
-    });
+    // expenses already saved in db
     db[prevKey].staff.am=document.getElementById('s-am').value;
     db[prevKey].staff.day=document.getElementById('s-day').value;
     db[prevKey].staff.night=document.getElementById('s-night').value;
@@ -470,34 +474,55 @@ document.getElementById('date-sel').addEventListener('change',function(){
 });
 document.getElementById('date-sel')._prevDate=todayStr;
 function saveCurrentStaff(){if(LOCKED)return;const db=loadDb();const k=getKey();if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};db[k].staff.am=document.getElementById('s-am').value;db[k].staff.day=document.getElementById('s-day').value;db[k].staff.night=document.getElementById('s-night').value;saveDb(db);}
-function saveCurrentExpenses(){
-  if(LOCKED)return;
-  const db=loadDb();const k=getKey();if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};
-  db[k].expenses=[];
-  document.querySelectorAll('#expenses .exp-row').forEach(row=>{
-    const name=row.querySelector('.exp-name')?.value||'';const amt=Number(row.querySelector('.exp-amt')?.value||0);const type=row.querySelector('.exp-type')?.value||'';
-    if(name||amt)db[k].expenses.push({name,amt,type});
-  });
-  saveDb(db);
-}
+function saveCurrentExpenses(){// expenses saved in real-time via addExpenseItem}
 function loadPage(){
   refreshLockState();const d=getData();
   document.getElementById('s-am').value=d.staff.am||'';document.getElementById('s-day').value=d.staff.day||'';document.getElementById('s-night').value=d.staff.night||'';
   renderExpenses();renderFloors();renderNotesClaims();updateFinalSummary();applyLockUI();populateRoomSelects();
 }
-function renderExpenses(){document.getElementById('expenses').innerHTML='';(getData().expenses||[]).forEach(e=>addExpenseRow(e.name,e.amt,e.type));}
-function addExpenseRow(name='',amt='',type=''){
-  const row=document.createElement('div');row.className='exp-row';
-  row.innerHTML=`
-    <input class="exp-name" type="text" placeholder="지출항목" value="${name}" ${LOCKED?'disabled':''} oninput="if(!LOCKED){saveCurrentExpenses();updateFinalSummary();}">
-    <input class="exp-amt" type="number" placeholder="금액" step="1000" value="${amt||''}" ${LOCKED?'disabled':''} oninput="if(!LOCKED){saveCurrentExpenses();updateFinalSummary();}">
-    <select class="exp-type" ${LOCKED?'disabled':''} onchange="if(!LOCKED){saveCurrentExpenses();updateFinalSummary();}">
-      <option value="">형태</option><option value="현금"${type==='현금'?' selected':''}>현금</option><option value="카드"${type==='카드'?' selected':''}>카드</option>
-    </select>
-    ${LOCKED?'<div></div>':`<button class="del-btn" onclick="if(!LOCKED){this.parentNode.remove();saveCurrentExpenses();updateFinalSummary();}">✕</button>`}`;
-  document.getElementById('expenses').appendChild(row);
+function renderExpenses(){
+  const expenses=getData().expenses||[];
+  const el=document.getElementById('expenses');
+  if(expenses.length===0){el.innerHTML='<div class="empty-nc">입력된 지출내역이 없습니다</div>';return;}
+  el.innerHTML=expenses.map((e,i)=>{
+    const typeClass=e.type==='현금'?'chip-현금':'chip-카드';
+    return `<div class="exp-item">
+      <div class="exp-item-left">
+        <span class="exp-item-name">${e.name||'(항목 없음)'}</span>
+        ${e.type?`<span class="chip ${typeClass}" style="font-size:10px">${e.type}</span>`:''}
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="exp-item-amt">${Number(e.amt||0).toLocaleString()}원</span>
+        ${!LOCKED?`<button class="nc-del" onclick="deleteExpense(${i})">✕</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
 }
-function addExpense(){if(LOCKED)return;addExpenseRow();}
+
+function addExpense(){if(LOCKED)return;}
+function addExpenseItem(){
+  if(LOCKED)return;
+  const name=document.getElementById('exp-name-input').value.trim();
+  const amt=Number(document.getElementById('exp-amt-input').value||0);
+  const type=document.getElementById('exp-type-input').value;
+  if(!name&&!amt){alert('항목과 금액을 입력해주세요.');return;}
+  const db=loadDb();const k=getKey();
+  if(!db[k].expenses)db[k].expenses=[];
+  db[k].expenses.push({name,amt,type});
+  saveDb(db);
+  document.getElementById('exp-name-input').value='';
+  document.getElementById('exp-amt-input').value='';
+  document.getElementById('exp-type-input').value='';
+  document.getElementById('exp-name-input').focus();
+  renderExpenses();updateFinalSummary();
+}
+function deleteExpense(idx){
+  if(LOCKED)return;
+  const db=loadDb();const k=getKey();
+  db[k].expenses.splice(idx,1);
+  saveDb(db);
+  renderExpenses();updateFinalSummary();
+}
 function renderFloors(){
   const floors=FLOORS[currentHotel],d=getData();
   const el=document.getElementById('floors');el.innerHTML='';
@@ -656,7 +681,7 @@ function closeRoomModal(){document.getElementById('room-modal').classList.remove
 document.getElementById('room-modal').addEventListener('click',function(e){if(e.target===this)closeRoomModal();});
 function getExpTotals(){
   let cash=0,card=0;
-  document.querySelectorAll('#expenses .exp-row').forEach(row=>{const amt=Number(row.querySelector('.exp-amt')?.value||0);const type=row.querySelector('.exp-type')?.value||'';if(type==='현금')cash+=amt;else if(type==='카드')card+=amt;});
+  (getData().expenses||[]).forEach(e=>{const amt=Number(e.amt||0);if(e.type==='현금')cash+=amt;else if(e.type==='카드')card+=amt;});
   return{cash,card};
 }
 function updateFinalSummary(){
