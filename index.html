@@ -571,7 +571,7 @@ function renderEditMode(){
         <div class="fg"><label>투숙객명</label><input type="text" value="${s.guest||''}" placeholder="" oninput="editSales[${si}].guest=this.value"></div>
         <div class="fg"><label>차량번호</label><input type="text" value="${s.car||''}" placeholder="" oninput="editSales[${si}].car=this.value"></div>
       </div>
-      <div class="fg"><label>체크인 시간</label><input type="time" value="${s.checkin||'11:00'}" oninput="editSales[${si}].checkin=this.value"></div>
+      <div class="fg"><label>체크인 시간</label><input type="time" value="${s.checkin||'11:00'}" step="600" oninput="editSales[${si}].checkin=this.value"></div>
       <div class="cb-row"><label><input type="checkbox" ${s.restay?'checked':''} onchange="editSales[${si}].restay=this.checked"> 재숙</label></div>
       <div class="fg"><label>클레임</label><textarea placeholder="" oninput="editSales[${si}].claim=this.value">${s.claim||''}</textarea></div>
       <div class="fg"><label>특이사항</label><textarea placeholder="" oninput="editSales[${si}].note=this.value">${s.note||''}</textarea></div>`;
