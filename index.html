@@ -24,7 +24,7 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .tab-btn.smart-active{background:var(--bg);color:var(--blue);border-bottom:2px solid var(--blue)}
 .staff-row{display:flex;align-items:center;gap:12px;margin-bottom:.6rem;background:var(--bg);padding:7px 12px;border-radius:7px;border:1px solid var(--border)}
 .staff-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text3)}
-.staff-item input{width:88px;font-size:12px;padding:4px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text)}
+.staff-item input{width:88px;font-size:12px;padding:4px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text);ime-mode:active}
 .staff-item input:disabled{opacity:.5;cursor:not-allowed;background:var(--bg2)}
 .floor-label{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
 .floor-section{margin-bottom:8px}
@@ -73,7 +73,7 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .exp-wrap{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px}
 .exp-header{display:grid;grid-template-columns:2fr 1.2fr 1fr 28px;gap:6px;font-size:10px;font-weight:600;color:var(--text3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
 .exp-row{display:grid;grid-template-columns:2fr 1.2fr 1fr 28px;gap:6px;align-items:center;margin-bottom:5px}
-.exp-row input,.exp-row select{font-size:12px;padding:5px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text);width:100%}
+.exp-row input,.exp-row select{font-size:12px;padding:5px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text);width:100%;ime-mode:active}
 .exp-row input:disabled,.exp-row select:disabled{opacity:.5;cursor:not-allowed;background:var(--bg2)}
 .add-btn{font-size:12px;padding:5px 12px;border-radius:7px;border:1.5px dashed var(--border2);background:var(--bg2);color:var(--text3);cursor:pointer}
 .add-btn:disabled{opacity:.4;cursor:not-allowed}
@@ -88,7 +88,7 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .nc-input-row1{display:flex;gap:6px;margin-bottom:5px}
 .nc-input-row2{display:flex;gap:6px}
 .nc-input-area select,.nc-input-area input{font-size:12px;padding:5px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text)}
-.nc-room-sel{flex:1}.nc-text-input{flex:1}
+.nc-room-sel{flex:1}.nc-text-input{flex:1;ime-mode:active}
 .nc-add-btn{font-size:11px;padding:5px 11px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer}
 .nc-items{padding:6px 10px;min-height:48px}
 .nc-item{display:flex;gap:8px;align-items:flex-start;padding:5px 4px;border-bottom:1px solid var(--border);font-size:12px}
@@ -150,6 +150,7 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .fg label{font-size:11px;color:var(--text3);display:block;margin-bottom:3px;font-weight:500}
 .fg label .req{color:var(--red);margin-left:2px}
 .fg input,.fg select,.fg textarea{width:100%;font-size:13px;padding:5px 9px;border-radius:7px;border:1px solid var(--border2);background:var(--bg);color:var(--text)}
+.fg input[type=text],.fg textarea{ime-mode:active}
 .fg textarea{resize:vertical;min-height:44px;font-size:12px}
 .fg-row{display:flex;gap:9px}.fg-row .fg{flex:1}
 .pay-rows{margin-bottom:7px}
@@ -337,7 +338,7 @@ function buildRooms(hotel){
     ['206','207'].forEach(r=>R[r]={type:'더블',nosmoking:true,floor:'2층'});
   } else {
     ['1001','1002','1003','1005','1006','1007','1008','1009','1010'].forEach(r=>R[r]={type:'더블',nosmoking:true,floor:'10층'});
-    R['1011']={type:'PH',nosmoking:true,floor:'10층'};
+    R['1011']={type:'PH',nosmoking:false,floor:'10층'};
     ['901','902','903','905','906','907','908','909','910'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'9층'});
     R['101']={type:'S',nosmoking:false,floor:'9층'};
     ['801','802','803','805','806','807','808','809','810'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'8층'});
