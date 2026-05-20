@@ -674,6 +674,8 @@ async function submitReport(){
     staff:d.staff,
     rooms:roomsWithInfo,
     expenses:d.expenses||[],
+    notes:(d.notes||[]).map(n=>({...n,source:'extra'})),
+    claims:(d.claims||[]).map(c=>({...c,source:'extra'})),
   };
 
   try{
