@@ -25,7 +25,7 @@ input,select,textarea,button{font-family:inherit}
 .tab-btn.smart-active{background:var(--bg);color:var(--blue);border-bottom:2px solid var(--blue)}
 .staff-row{display:flex;align-items:center;gap:12px;margin-bottom:.6rem;background:var(--bg);padding:7px 12px;border-radius:7px;border:1px solid var(--border)}
 .staff-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text3)}
-.staff-item input{width:88px;font-size:12px;padding:4px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text);ime-mode:active}
+.staff-item input{width:88px;font-size:12px;padding:4px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text)}
 .staff-item input:disabled{opacity:.5;cursor:not-allowed;background:var(--bg2)}
 .floor-label{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
 .floor-section{margin-bottom:8px}
@@ -54,7 +54,6 @@ input,select,textarea,button{font-family:inherit}
 .sale-slot.cancelled{opacity:.5;text-decoration:line-through;background:#FEF2F2}
 .sale-price{font-size:15px;font-weight:600;color:var(--text)}
 .sale-guest{font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sale-car{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px;margin-top:4px;line-height:1}
 .pay-chips{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
 .chip{font-size:10px;padding:2px 5px;border-radius:3px;font-weight:600}
 .chip-현금{background:#F7F7F5;color:#1A1A18}
@@ -71,15 +70,10 @@ input,select,textarea,button{font-family:inherit}
 .chip-재숙{background:#EDE9FE;color:#5B21B6}
 .empty-room{height:58px}
 .section-title{font-size:11px;font-weight:700;color:var(--text3);margin:1rem 0 5px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);padding-bottom:3px}
-.exp-wrap{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px}
-.exp-item{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border);font-size:12px}
-.exp-item:last-child{border-bottom:none}
-.exp-item-left{display:flex;gap:8px;align-items:center}
-.exp-item-name{color:var(--text);font-weight:500}
-.exp-item-type{font-size:10px;padding:1px 6px;border-radius:3px;font-weight:600}
-.exp-item-amt{color:var(--text);font-weight:600}
-.exp-row{display:grid;grid-template-columns:2fr 1.2fr 1fr auto;gap:6px;align-items:center;margin-bottom:5px}
-.exp-row input,.exp-row select{font-size:12px;padding:5px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text);width:100%;ime-mode:active}
+.exp-wrap{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.exp-header{display:grid;grid-template-columns:2fr 1.2fr 1fr 28px;gap:6px;font-size:10px;font-weight:600;color:var(--text3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+.exp-row{display:grid;grid-template-columns:2fr 1.2fr 1fr 28px;gap:6px;align-items:center;margin-bottom:5px}
+.exp-row input,.exp-row select{font-size:12px;padding:5px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text);width:100%}
 .exp-row input:disabled,.exp-row select:disabled{opacity:.5;cursor:not-allowed;background:var(--bg2)}
 .add-btn{font-size:12px;padding:5px 12px;border-radius:7px;border:1.5px dashed var(--border2);background:var(--bg2);color:var(--text3);cursor:pointer}
 .add-btn:disabled{opacity:.4;cursor:not-allowed}
@@ -94,7 +88,7 @@ input,select,textarea,button{font-family:inherit}
 .nc-input-row1{display:flex;gap:6px;margin-bottom:5px}
 .nc-input-row2{display:flex;gap:6px}
 .nc-input-area select,.nc-input-area input{font-size:12px;padding:5px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text)}
-.nc-room-sel{flex:1}.nc-text-input{flex:1;ime-mode:active}
+.nc-room-sel{flex:1}.nc-text-input{flex:1}
 .nc-add-btn{font-size:11px;padding:5px 11px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer}
 .nc-items{padding:6px 10px;min-height:48px}
 .nc-item{display:flex;gap:8px;align-items:flex-start;padding:5px 4px;border-bottom:1px solid var(--border);font-size:12px}
@@ -107,30 +101,24 @@ input,select,textarea,button{font-family:inherit}
 .nc-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:0 2px}
 .empty-nc{font-size:11px;color:var(--text3);padding:10px 4px;text-align:center}
 .final-summary{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:.5rem;width:380px;margin-left:auto;margin-right:auto}
-.fs-row{display:flex;justify-content:center;align-items:center;padding:7px 14px;border-bottom:1px solid var(--border);font-size:13px;gap:48px}
+.fs-row{display:flex;justify-content:center;gap:48px;align-items:center;padding:7px 14px;border-bottom:1px solid var(--border);font-size:13px}
 .fs-row:last-child{border-bottom:none}
 .fs-row.fs-total{background:var(--bg2);font-weight:600}
 .fs-row.fs-expense{background:#FEF2F2}
 .fs-row.fs-balance{background:var(--green-bg);font-weight:600}
 .fs-label{color:var(--text3);font-size:12px;width:120px;text-align:right;flex-shrink:0}
 .fs-val{font-weight:600;color:var(--text);font-size:13px;width:130px;text-align:left;flex-shrink:0}
+.fs-val.현금{color:#1A1A18}.fs-val.카드{color:#CC0000}.fs-val.NOL{color:#0066CC}.fs-val.여기어때{color:#FF2B4A}
+.fs-val.통장{color:#5B21B6}.fs-val.도도포인트{color:#4B7BEC}.fs-val.미수금{color:#A32D2D}
+.fs-val.장기방{color:#166534}.fs-val.직원숙소{color:#475569}.fs-val.기타{color:#4B4A47}
 .fs-val.green{color:var(--green)}.fs-val.red{color:var(--red)}.fs-val.blue{color:var(--blue)}
-.fs-val.현금{color:#1A1A18}
-.fs-val.카드{color:#CC0000}
-.fs-val.NOL{color:#0066CC}
-.fs-val.여기어때{color:#FF2B4A}
-.fs-val.통장{color:#5B21B6}
-.fs-val.도도포인트{color:#4B7BEC}
-.fs-val.미수금{color:#A32D2D}
-.fs-val.기타{color:#4B4A47}
-.fs-val.장기방{color:#166534}
-.fs-val.직원숙소{color:#475569}
 .submit-area{margin-top:1.25rem;padding:1.1rem 1.25rem;background:var(--bg);border:1px solid var(--border);border-radius:9px;width:380px;margin-left:auto;margin-right:auto}
 .submit-area-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
 .submit-title{font-size:13px;font-weight:600;color:var(--text)}
 .submit-status{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600}
 .status-pending{background:var(--orange-bg);color:var(--orange)}
 .status-sent{background:var(--green-bg);color:var(--green)}
+.status-future{background:var(--blue-bg);color:var(--blue)}
 .submit-info{font-size:12px;color:var(--text3);margin-bottom:.75rem;line-height:1.6}
 .btn-submit{width:100%;padding:10px;font-size:14px;font-weight:600;border-radius:8px;border:none;cursor:pointer;background:#1D9E75;color:#fff}
 .btn-submit:disabled{background:var(--bg3);color:var(--text3);cursor:not-allowed}
@@ -156,7 +144,6 @@ input,select,textarea,button{font-family:inherit}
 .fg label{font-size:11px;color:var(--text3);display:block;margin-bottom:3px;font-weight:500}
 .fg label .req{color:var(--red);margin-left:2px}
 .fg input,.fg select,.fg textarea{width:100%;font-size:13px;padding:5px 9px;border-radius:7px;border:1px solid var(--border2);background:var(--bg);color:var(--text)}
-.fg input[type=text],.fg textarea{ime-mode:active}
 .fg textarea{resize:vertical;min-height:44px;font-size:12px}
 .fg-row{display:flex;gap:9px}.fg-row .fg{flex:1}
 .pay-rows{margin-bottom:7px}
@@ -182,16 +169,22 @@ input,select,textarea,button{font-family:inherit}
 .hist-price{font-size:14px;font-weight:600;color:var(--red);text-decoration:line-through}
 
 .pw-overlay{display:flex;position:fixed;inset:0;background:#F3F2EF;z-index:9999;align-items:center;justify-content:center}
-.pw-box{background:#fff;border:1px solid #E5E4E1;border-radius:12px;padding:2rem;width:320px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08)}
+.pw-box{background:#fff;border:1px solid #E5E4E1;border-radius:12px;padding:2rem;width:320px;text-align:center}
 .pw-title{font-size:18px;font-weight:700;color:#1A1A18;margin-bottom:.4rem}
 .pw-sub{font-size:13px;color:#7C7B77;margin-bottom:1.2rem}
-.pw-input{width:100%;font-size:15px;padding:9px 12px;border-radius:8px;border:1.5px solid #D1CFC9;text-align:center;letter-spacing:3px;margin-bottom:.8rem;outline:none}
+.pw-input{width:100%;font-size:15px;padding:9px 12px;border-radius:8px;border:1.5px solid #D1CFC9;text-align:center;letter-spacing:3px;margin-bottom:.8rem;outline:none;font-family:inherit}
 .pw-input:focus{border-color:#0F6E56}
 .pw-btn{width:100%;padding:10px;font-size:14px;font-weight:600;border-radius:8px;border:none;background:#0F6E56;color:#fff;cursor:pointer}
-.pw-btn:hover{opacity:.9}
 .pw-error{font-size:12px;color:#A32D2D;margin-top:.5rem;display:none}
-</style>
 
+.exp-item{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border);font-size:12px}
+.exp-item:last-child{border-bottom:none}
+.exp-item-left{display:flex;gap:8px;align-items:center}
+.exp-item-name{color:var(--text);font-weight:500}
+.exp-item-amt{color:var(--text);font-weight:600}
+.sale-car{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px;margin-top:4px;line-height:1}
+.nc-input-area.locked{opacity:.45;pointer-events:none;user-select:none}
+</style>
 
 <div class="pw-overlay" id="pw-overlay">
   <div class="pw-box">
@@ -225,7 +218,7 @@ input,select,textarea,button{font-family:inherit}
   <div class="exp-wrap">
     <div class="nc-input-area" id="exp-input-area">
       <div class="exp-row" style="margin-bottom:0">
-        <input class="exp-name" type="text" id="exp-name-input" placeholder="지출항목" ime-mode="active">
+        <input class="exp-name" type="text" id="exp-name-input" placeholder="지출항목">
         <input class="exp-amt" type="number" id="exp-amt-input" placeholder="금액" step="1000">
         <select class="exp-type" id="exp-type-input">
           <option value="">형태</option>
@@ -296,30 +289,10 @@ input,select,textarea,button{font-family:inherit}
 </div>
 
 <script>
-
-const PW = '1234'; // 비밀번호 여기서 변경
+const PW='1234';
 function getTodayStr(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
-function checkPw(){
-  const input = document.getElementById('pw-input').value;
-  if(input === PW){
-    localStorage.setItem('motelAuth', PW + '_' + getTodayStr());
-    document.getElementById('pw-overlay').style.display = 'none';
-    document.getElementById('pw-input').value = '';
-  } else {
-    document.getElementById('pw-error').style.display = 'block';
-    document.getElementById('pw-input').value = '';
-    document.getElementById('pw-input').focus();
-  }
-}
-function checkAuth(){
-  const auth = localStorage.getItem('motelAuth');
-  const expected = PW + '_' + getTodayStr();
-  if(auth !== expected){
-    document.getElementById('pw-overlay').style.display = 'flex';
-  } else {
-    document.getElementById('pw-overlay').style.display = 'none';
-  }
-}
+function checkPw(){const input=document.getElementById('pw-input').value;if(input===PW){localStorage.setItem('motelAuth',PW+'_'+getTodayStr());document.getElementById('pw-overlay').style.display='none';document.getElementById('pw-input').value='';}else{document.getElementById('pw-error').style.display='block';document.getElementById('pw-input').value='';document.getElementById('pw-input').focus();}}
+function checkAuth(){const auth=localStorage.getItem('motelAuth');const expected=PW+'_'+getTodayStr();if(auth!==expected){document.getElementById('pw-overlay').style.display='flex';}else{document.getElementById('pw-overlay').style.display='none';}}
 checkAuth();
 
 function buildRooms(hotel){
@@ -397,7 +370,6 @@ const FLOORS={
   ]
 };
 
-// 장기 제거
 const PAYS={
   '스마트호텔':['현금','카드','NOL','여기어때','통장','미수금','장기방','기타'],
   '랜드호텔':['현금','카드','NOL','여기어때','통장','도도포인트','미수금','장기방','직원숙소','기타']
@@ -405,13 +377,13 @@ const PAYS={
 
 let currentHotel='랜드호텔',currentRoom=null,modalMode='edit',editSales=[],pendingCancel={};
 let LOCKED=false;
+function loadDb(){try{return JSON.parse(localStorage.getItem('motelDb')||'{}');}catch(e){return {};}}
+function saveDb(db){try{localStorage.setItem('motelDb',JSON.stringify(db));}catch(e){}}
 const today=new Date(),todayStr=today.toISOString().slice(0,10);
 document.getElementById('date-sel').value=todayStr;
 function getDate(){return document.getElementById('date-sel').value;}
 function getKey(){return getDate()+'__'+currentHotel;}
 function isFutureDate(){return getDate()>todayStr;}
-function loadDb(){try{return JSON.parse(localStorage.getItem('motelDb')||'{}');}catch(e){return {};}}
-function saveDb(db){try{localStorage.setItem('motelDb',JSON.stringify(db));}catch(e){}}
 function ensureData(){const db=loadDb();const k=getKey();if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};saveDb(db);return db[k];}
 function getData(){const db=loadDb();const k=getKey();if(!db[k])return ensureData();return db[k];}
 function fmt(n){return Number(n||0).toLocaleString();}
@@ -434,7 +406,7 @@ function applyLockUI(){
   else banner.classList.remove('show');
   ['s-am','s-day','s-night'].forEach(id=>document.getElementById(id).disabled=LOCKED);
   document.getElementById('add-exp-btn').disabled=LOCKED;
-  const expArea=document.getElementById('exp-input-area');if(expArea){LOCKED?expArea.classList.add('locked'):expArea.classList.remove('locked');}document.getElementById('add-exp-btn').disabled=LOCKED;
+  const expArea=document.getElementById('exp-input-area');if(expArea){LOCKED?expArea.classList.add('locked'):expArea.classList.remove('locked');}if(document.getElementById('add-exp-btn'))document.getElementById('add-exp-btn').disabled=LOCKED;
   ['note-input-area','claim-input-area'].forEach(id=>{const el=document.getElementById(id);LOCKED?el.classList.add('locked'):el.classList.remove('locked');});
   const btn=document.getElementById('btn-submit'),status=document.getElementById('submit-status'),info=document.getElementById('submit-info');
   document.getElementById('submit-title').textContent=`${currentHotel} ${getDate()} 보고서 제출`;
@@ -442,39 +414,15 @@ function applyLockUI(){
   else{status.className='submit-status status-pending';status.textContent='미제출';btn.className='btn-submit';btn.textContent='제출';btn.disabled=false;info.innerHTML='당일 보고서 작성이 완료되면 제출 버튼을 눌러주세요.<br>제출 후에는 수정이 불가합니다.';}
 }
 function switchTab(hotel){
-  if(!LOCKED){
-    const db=loadDb();const k=getKey();
-    if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};
-    // expenses already saved in db
-    db[k].staff.am=document.getElementById('s-am').value;
-    db[k].staff.day=document.getElementById('s-day').value;
-    db[k].staff.night=document.getElementById('s-night').value;
-    saveDb(db);
-  }
+  if(!LOCKED){saveCurrentExpenses();saveCurrentStaff();}
   currentHotel=hotel;
   document.getElementById('tab-land').className='tab-btn'+(hotel==='랜드호텔'?' land-active':'');
   document.getElementById('tab-smart').className='tab-btn'+(hotel==='스마트호텔'?' smart-active':'');
   loadPage();
 }
-document.getElementById('date-sel').addEventListener('change',function(){
-  const prevDate=this._prevDate||todayStr;
-  const prevKey=prevDate+'__'+currentHotel;
-  if(!LOCKED){
-    // 이전 날짜 키로 저장
-    const db=loadDb();
-    if(!db[prevKey])db[prevKey]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};
-    // expenses already saved in db
-    db[prevKey].staff.am=document.getElementById('s-am').value;
-    db[prevKey].staff.day=document.getElementById('s-day').value;
-    db[prevKey].staff.night=document.getElementById('s-night').value;
-    saveDb(db);
-  }
-  this._prevDate=this.value;
-  loadPage();
-});
-document.getElementById('date-sel')._prevDate=todayStr;
+document.getElementById('date-sel').addEventListener('change',()=>{if(!LOCKED){saveCurrentExpenses();saveCurrentStaff();}loadPage();});
 function saveCurrentStaff(){if(LOCKED)return;const db=loadDb();const k=getKey();if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};db[k].staff.am=document.getElementById('s-am').value;db[k].staff.day=document.getElementById('s-day').value;db[k].staff.night=document.getElementById('s-night').value;saveDb(db);}
-function saveCurrentExpenses(){// expenses saved in real-time via addExpenseItem}
+function saveCurrentExpenses(){}
 function loadPage(){
   refreshLockState();const d=getData();
   document.getElementById('s-am').value=d.staff.am||'';document.getElementById('s-day').value=d.staff.day||'';document.getElementById('s-night').value=d.staff.night||'';
@@ -487,20 +435,10 @@ function renderExpenses(){
   el.innerHTML=expenses.map(function(e,i){
     const typeClass=e.type==='현금'?'chip-현금':'chip-카드';
     const typeChip=e.type?'<span class="chip '+typeClass+'" style="font-size:10px">'+e.type+'</span>':'';
-    const delBtn=!LOCKED?'<button class="nc-del" onclick="deleteExpense('+i+')">✕</button>':'';
-    return '<div class="exp-item">'
-      +'<div class="exp-item-left">'
-      +'<span class="exp-item-name">'+(e.name||'(항목 없음)')+'</span>'
-      +typeChip
-      +'</div>'
-      +'<div style="display:flex;align-items:center;gap:8px">'
-      +'<span class="exp-item-amt">'+Number(e.amt||0).toLocaleString()+'원</span>'
-      +delBtn
-      +'</div>'
-      +'</div>';
+    const delBtn=!LOCKED?'<button class="nc-del" onclick="deleteExpense('+i+')">&#x2715;</button>':'';
+    return '<div class="exp-item"><div class="exp-item-left"><span class="exp-item-name">'+(e.name||'(항목)')+'</span>'+typeChip+'</div><div style="display:flex;align-items:center;gap:8px"><span class="exp-item-amt">'+Number(e.amt||0).toLocaleString()+'원</span>'+delBtn+'</div></div>';
   }).join('');
 }
-
 function addExpense(){if(LOCKED)return;}
 function addExpenseItem(){
   if(LOCKED)return;
@@ -509,13 +447,13 @@ function addExpenseItem(){
   const type=document.getElementById('exp-type-input').value;
   if(!name&&!amt){alert('항목과 금액을 입력해주세요.');return;}
   const db=loadDb();const k=getKey();
+  if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};
   if(!db[k].expenses)db[k].expenses=[];
   db[k].expenses.push({name,amt,type});
   saveDb(db);
   document.getElementById('exp-name-input').value='';
   document.getElementById('exp-amt-input').value='';
   document.getElementById('exp-type-input').value='';
-  document.getElementById('exp-name-input').focus();
   renderExpenses();updateFinalSummary();
 }
 function deleteExpense(idx){
@@ -549,9 +487,9 @@ function renderFloors(){
       if(!sales.length){inner+=`<div class="empty-room"></div>`;}
       else sales.forEach(s=>{
         const tot=s.pays.reduce((a,p)=>a+Number(p.amt||0),0);
-        const chips=s.pays.map(p=>{const cls=`chip chip-${p.type.replace(/\s/g,'')}`;if(p.type==='도도포인트'){return`<span class="${cls}"><span style="color:#4B7BEC">도도</span><span style="color:#A0A0A0">포인트</span></span>`;}return`<span class="${cls}">${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt):''}</span>`;}).join('');
+        const chips=s.pays.map(p=>{const cls='chip chip-'+p.type.replace(/\s/g,'');if(p.type==='도도포인트'){return'<span class="'+cls+'"><span style="color:#4B7BEC">도도</span><span style="color:#A0A0A0">포인트</span></span>';}return'<span class="'+cls+'">'+p.type+(Number(p.amt||0)>0?' '+fmt(p.amt):'')+' </span>';}).join('');
         const restayChip=s.restay?`<span class="chip chip-재숙">재숙</span>`:'';
-        inner+=`<div class="sale-slot${s.cancelled?' cancelled':''}"><div style="display:flex;align-items:center;gap:4px"><div class="sale-price">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':'포인트 투숙'}</div>${restayChip}</div><div class="sale-guest">${s.guest||''}</div>${s.car?'<div class="sale-car"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg> '+s.car+'</div>':''}<div class="pay-chips">${chips}${s.cancelled?'<span class="chip chip-취소">취소</span>':''}</div></div>`;
+        inner+=`<div class="sale-slot${s.cancelled?' cancelled':''}"><div class="sale-price">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':'포인트 투숙'}</div><div class="sale-guest">${s.guest||''}</div>${s.car?'<div class="sale-car"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg> '+s.car+'</div>':''}<div class="pay-chips">${chips}${s.cancelled?'<span class="chip chip-취소">취소</span>':''}</div></div>`;
       });
       card.innerHTML=inner;grid.appendChild(card);
     });
@@ -573,11 +511,11 @@ function renderViewMode(){
     const tot=s.pays.reduce((a,p)=>a+Number(p.amt||0),0);const isCancelled=s.cancelled;
     const card=document.createElement('div');card.className='sale-card'+(isCancelled?' cancelled-card':'');
     const label=sales.length>1?`판매 ${si+1}번`:'판매 내역';const badge=isCancelled?` <span class="cancelled-badge">취소됨</span>`:'';
-    var headCls=isCancelled?'cancelled-head':'saved-head';
-    var priceStr2=tot>0?fmt(tot)+'원':s.pays.some(function(p){return p.type==='직원숙소';})?'직원숙소':s.pays.some(function(p){return p.type==='장기방';})?'장기방':'포인트 투숙';
-    var actHtml=(!isCancelled&&!LOCKED)?'<div class="saved-actions"><button class="btn btn-edit" style="font-size:11px;padding:5px 11px;flex:none" onclick="startEditSale('+si+')">수정</button><button class="btn btn-cancel-sale" style="font-size:11px;padding:5px 11px;flex:none" onclick="openCancelModal(\''+currentRoom+'\','+si+')">결제취소</button></div>':'';
-    var cancelInfoHtml=isCancelled?'<div style="font-size:11px;color:#991B1B;margin-top:5px;padding:0 11px 8px">취소사유: '+(s.cancelReason||'-')+'</div>':'';
-    card.innerHTML='<div class="sale-card-head '+headCls+'"><span>'+label+badge+'</span><span style="font-size:11px">'+priceStr2+'</span></div><div class="sale-card-body"><div class="saved-view" id="sv-'+si+'"></div>'+actHtml+cancelInfoHtml+'</div>';
+    card.innerHTML=`
+      <div class="sale-card-head ${isCancelled?'cancelled-head':'saved-head'}"><span>${label}${badge}</span><span style="font-size:11px">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':'포인트 투숙'}</span></div>
+      <div class="sale-card-body"><div class="saved-view" id="sv-${si}"></div>
+      ${!isCancelled&&!LOCKED?`<div class="saved-actions"><button class="btn btn-edit" style="font-size:11px;padding:5px 11px;flex:none" onclick="startEditSale(${si})">수정</button><button class="btn btn-cancel-sale" style="font-size:11px;padding:5px 11px;flex:none" onclick="openCancelModal('${currentRoom}',${si})">결제취소</button></div>`:isCancelled?`<div style="font-size:11px;color:#991B1B;margin-top:7px">취소사유: ${s.cancelReason||'-'} (${s.cancelledAt})</div>`:''}
+      </div>`;
     body.appendChild(card);
     const sv=document.getElementById('sv-'+si);
     const rows=[['결제',s.pays.map(p=>`${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt)+'원':'(포인트 투숙)'}`).join(' / ')],s.guest?['투숙객',s.guest]:null,s.car?['차량번호',s.car]:null,['체크인',s.checkin],s.restay?['재숙','✓']:null,s.claim?['클레임',s.claim]:null,s.note?['특이사항',s.note]:null].filter(Boolean);
@@ -628,8 +566,15 @@ function renderEditMode(){
     addPayBtn.addEventListener('click',()=>{editSales[si].pays.push({type:'',amt:''});renderEditMode();});
     paySection.appendChild(payRows);paySection.appendChild(addPayBtn);eb.appendChild(paySection);
     const rest=document.createElement('div');
-    rest.innerHTML='<div class="fg-row"><div class="fg"><label>투숙객명</label><input type="text" id="inp-guest-'+si+'" value="'+(s.guest||'')+'" placeholder="성명" oninput="editSales['+si+'].guest=this.value"></div><div class="fg"><label>차량번호</label><input type="text" id="inp-car-'+si+'" value="'+(s.car||'')+'" placeholder="12가 3456" oninput="editSales['+si+'].car=this.value"></div></div><div class="fg"><label>체크인 시간</label><select id="sel-checkin-'+si+'" onchange="editSales['+si+'].checkin=this.value"></select></div><div class="cb-row"><label><input type="checkbox" '+(s.restay?'checked':'')+' onchange="editSales['+si+'].restay=this.checked"> 재숙</label></div><div class="fg"><label>클레임</label><textarea placeholder="클레임 내용" oninput="editSales['+si+'].claim=this.value">'+(s.claim||'')+'</textarea></div><div class="fg"><label>특이사항</label><textarea placeholder="특이사항" oninput="editSales['+si+'].note=this.value">'+(s.note||'')+'</textarea></div>';
-    (function(){var times=[];for(var h=0;h<24;h++){for(var m=0;m<60;m+=10){var t=(h<10?'0'+h:h)+':'+(m<10?'0'+m:m);times.push(t);}}var sel=document.getElementById('sel-checkin-'+si);times.forEach(function(t){var o=document.createElement('option');o.value=t;o.textContent=t;if(t===(s.checkin||'11:00'))o.selected=true;sel.appendChild(o);});})();
+    rest.innerHTML=`
+      <div class="fg-row">
+        <div class="fg"><label>투숙객명</label><input type="text" value="${s.guest||''}" placeholder="성명" oninput="editSales[${si}].guest=this.value"></div>
+        <div class="fg"><label>차량번호</label><input type="text" value="${s.car||''}" placeholder="12가 3456" oninput="editSales[${si}].car=this.value"></div>
+      </div>
+      <div class="fg"><label>체크인 시간</label><input type="time" value="${s.checkin||'11:00'}" oninput="editSales[${si}].checkin=this.value"></div>
+      <div class="cb-row"><label><input type="checkbox" ${s.restay?'checked':''} onchange="editSales[${si}].restay=this.checked"> 재숙</label></div>
+      <div class="fg"><label>클레임</label><textarea placeholder="클레임 내용" oninput="editSales[${si}].claim=this.value">${s.claim||''}</textarea></div>
+      <div class="fg"><label>특이사항</label><textarea placeholder="특이사항" oninput="editSales[${si}].note=this.value">${s.note||''}</textarea></div>`;
     eb.appendChild(rest);
   });
   const btns=document.createElement('div');btns.className='modal-btns';
@@ -666,9 +611,7 @@ function closeCancelModal(){document.getElementById('cancel-modal').classList.re
 function confirmCancel(){
   if(LOCKED)return;const reason=document.getElementById('cancel-reason').value.trim();if(!reason){alert('취소 사유를 입력해주세요.');return;}
   const{roomId,saleIdx}=pendingCancel;const s=getData().rooms[roomId][saleIdx];
-  const dbC=loadDb();const kC=getKey();
-  dbC[kC].rooms[roomId][saleIdx].cancelled=true;dbC[kC].rooms[roomId][saleIdx].cancelReason=reason;dbC[kC].rooms[roomId][saleIdx].cancelledAt=nowStr();
-  saveDb(dbC);
+  const dbC=loadDb();const kC=getKey();dbC[kC].rooms[roomId][saleIdx].cancelled=true;dbC[kC].rooms[roomId][saleIdx].cancelReason=reason;dbC[kC].rooms[roomId][saleIdx].cancelledAt=nowStr();saveDb(dbC);
   closeCancelModal();renderViewMode();renderFloors();updateFinalSummary();renderNotesClaims();
 }
 document.getElementById('cancel-modal').addEventListener('click',function(e){if(e.target===this)closeCancelModal();});
@@ -725,57 +668,32 @@ function addClaimDirectly(){if(LOCKED)return;const roomId=document.getElementByI
 function delExtra(type,allIdx,roomCount){if(LOCKED)return;const dbD=loadDb();const kD=getKey();const ei=allIdx-roomCount;if(type==='note')dbD[kD].notes.splice(ei,1);else dbD[kD].claims.splice(ei,1);saveDb(dbD);renderNotesClaims();}
 async function submitReport(){
   if(LOCKED)return;
-  saveCurrentExpenses();saveCurrentStaff();
+  saveCurrentStaff();
   const d=getData();
   const count=Object.values(d.rooms).reduce((a,s)=>a+s.filter(x=>hasSale(x)).length,0);
   if(count===0){alert('입력된 판매/예약 내역이 없습니다.');return;}
   if(!confirm(`${currentHotel} ${getDate()} 보고서를 제출하시겠습니까?\n제출 후에는 수정이 불가합니다.`))return;
-
-  // 전송 버튼 비활성화
   const btn=document.getElementById('btn-submit');
   btn.disabled=true;btn.textContent='전송 중...';
-
-  // 객실 데이터에 타입/금연 정보 추가
   const roomsWithInfo={};
-  Object.entries(d.rooms).forEach(([rid,sales])=>{
-    const info=getRoomInfo(rid);
-    roomsWithInfo[rid]=sales.map(s=>({...s,type:info.type,nosmoking:info.nosmoking,floor:info.floor}));
-  });
-
-  const payload={
-    hotel:currentHotel,
-    date:getDate(),
-    staff:d.staff,
-    rooms:roomsWithInfo,
-    expenses:d.expenses||[],
-    notes:(d.notes||[]).map(n=>({...n,source:'extra'})),
-    claims:(d.claims||[]).map(c=>({...c,source:'extra'})),
-  };
-
+  Object.entries(d.rooms).forEach(([rid,sales])=>{const info=getRoomInfo(rid);roomsWithInfo[rid]=sales.map(s=>({...s,type:info.type,nosmoking:info.nosmoking,floor:info.floor}));});
+  const payload={hotel:currentHotel,date:getDate(),staff:d.staff,rooms:roomsWithInfo,expenses:d.expenses||[],notes:(d.notes||[]).map(n=>({...n,source:'extra'})),claims:(d.claims||[]).map(cc=>({...cc,source:'extra'})),};
   try{
-    const res=await fetch('https://motel-report.visualium.workers.dev',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload),
-    });
+    const res=await fetch('https://motel-report.visualium.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const result=await res.json();
-    if(result.success){
-      const dbS=loadDb();const kS=getKey();dbS[kS].submitted=true;dbS[kS].submittedAt=nowStr();saveDb(dbS);loadPage();
-      alert('✅ 에어테이블 전송 완료!');
-    } else {
-      throw new Error(JSON.stringify(result));
-    }
-  } catch(err){
-    btn.disabled=false;btn.textContent='제출';
-    alert('❌ 전송 실패: '+err.message+'\n\n잠시 후 다시 시도해주세요.');
-  }
+    if(result.success){const dbS=loadDb();const kS=getKey();dbS[kS].submitted=true;dbS[kS].submittedAt=nowStr();saveDb(dbS);loadPage();alert('에어테이블 전송 완료!');}
+    else{throw new Error(JSON.stringify(result));}
+  }catch(er){btn.disabled=false;btn.textContent='제출';alert('전송 실패: '+er.message+' 잠시 후 다시 시도해주세요.');}
 }
 function showHistory(){
   const d=getData(),content=document.getElementById('hist-content');
   const cancelled=[];Object.entries(d.rooms).forEach(([rid,sales])=>sales.forEach(s=>{if(s.cancelled)cancelled.push({rid,...s});}));
   content.innerHTML=cancelled.length===0?'<p style="font-size:13px;color:#6B7280;text-align:center;padding:1rem">취소 내역이 없습니다.</p>'
-    :cancelled.map(c=>{const tot=c.pays.reduce((a,p)=>a+Number(p.amt||0),0);const chips=c.pays.map(function(p){var cls='chip chip-'+p.type.replace(/\s/g,'');var amt=Number(p.amt||0)>0?' '+fmt(p.amt):'';return '<span class="'+cls+'">'+p.type+amt+'</span>';}).join(' ');
-      return '<div class="hist-item hist-cancelled"><div class="hist-row"><span><b>'+c.rid+'호</b></span><span class="cancelled-badge">취소</span></div><div class="hist-price">'+(tot>0?fmt(tot)+'원':c.pays&&c.pays.some(p=>p.type==='직원숙소')?'직원숙소':c.pays&&c.pays.some(p=>p.type==='장기방')?'장기방':'포인트 투숙')+'</div><div style="font-size:11px;margin:3px 0">'+chips+'</div><div style="font-size:11px;color:#6B7280">투숙객: '+(c.guest||'-')+(c.car?' | 차번호: '+c.car:'')+'  | 취소: '+(c.cancelledAt||'-')+'</div><div style="font-size:11px;color:#991B1B;margin-top:3px">사유: '+(c.cancelReason||'-')+'</div></div>';}).join('');
+    :cancelled.map(c=>{const tot=c.pays.reduce((a,p)=>a+Number(p.amt||0),0);const chips=c.pays.map(p=>`<span class="chip chip-${p.type.replace(/\s/g,'')}">${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt):''}</span>`).join(' ');
+      return `<div class="hist-item hist-cancelled"><div class="hist-row"><span><b>${c.rid}호</b></span><span class="cancelled-badge">취소</span></div>
+        <div class="hist-price">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':'포인트 투숙'}</div><div style="font-size:11px;margin:3px 0">${chips}</div>
+        <div style="font-size:11px;color:#6B7280">투숙객: ${c.guest||'-'}${c.car?' | 차번호: '+c.car:''} | 취소: ${c.cancelledAt||'-'}</div>
+        <div style="font-size:11px;color:#991B1B;margin-top:3px">사유: ${c.cancelReason||'-'}</div></div>`;}).join('');
   document.getElementById('hist-modal').classList.add('show');
 }
 document.getElementById('hist-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
