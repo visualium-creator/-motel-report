@@ -66,6 +66,7 @@ input,select,textarea,button{font-family:inherit}
 .chip-기타{background:#F7F7F5;color:#4B4A47}
 .chip-장기방{background:#F0FDF4;color:#166534}
 .chip-직원숙소{background:#F1F5F9;color:#475569}
+.chip-서비스{background:#F0FFF4;color:#166534}
 .chip-취소{background:#FEE2E2;color:#991B1B}
 .chip-재숙{background:#EDE9FE;color:#5B21B6}
 .empty-room{height:58px}
@@ -111,6 +112,7 @@ input,select,textarea,button{font-family:inherit}
 .fs-val.현금{color:#1A1A18}.fs-val.카드{color:#CC0000}.fs-val.NOL{color:#0066CC}.fs-val.여기어때{color:#FF2B4A}
 .fs-val.통장{color:#5B21B6}.fs-val.도도포인트{color:#4B7BEC}.fs-val.미수금{color:#A32D2D}
 .fs-val.장기방{color:#166534}.fs-val.직원숙소{color:#475569}.fs-val.기타{color:#4B4A47}
+.fs-val.서비스{color:#166534}
 .fs-val.green{color:var(--green)}.fs-val.red{color:var(--red)}.fs-val.blue{color:var(--blue)}
 .submit-area{margin-top:1.25rem;padding:1.1rem 1.25rem;background:var(--bg);border:1px solid var(--border);border-radius:9px;width:380px;margin-left:auto;margin-right:auto}
 .submit-area-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
@@ -371,8 +373,8 @@ const FLOORS={
 };
 
 const PAYS={
-  '스마트호텔':['현금','카드','NOL','여기어때','통장','미수금','장기방','기타'],
-  '랜드호텔':['현금','카드','NOL','여기어때','통장','도도포인트','미수금','장기방','직원숙소','기타']
+  '스마트호텔':['현금','카드','NOL','여기어때','통장','미수금','장기방','서비스','기타'],
+  '랜드호텔':['현금','카드','NOL','여기어때','통장','도도포인트','미수금','장기방','직원숙소','서비스','기타']
 };
 
 let currentHotel='랜드호텔',currentRoom=null,modalMode='edit',editSales=[],pendingCancel={};
@@ -391,7 +393,7 @@ function newSale(){return{pays:[{type:'',amt:''}],guest:'',car:'',checkin:'11:00
 function nowStr(){const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
 function getRoomInfo(r){return buildRooms(currentHotel)[r]||{type:'',nosmoking:false,floor:''};}
 function getAllRooms(){const r=[];FLOORS[currentHotel].forEach(f=>f.rooms.forEach(rm=>r.push(rm)));return r;}
-function hasSale(s){if(s.cancelled)return false;const isStaff=s.pays.some(p=>p.type==='직원숙소');if(isStaff)return false;const hasDodo=s.pays.some(p=>p.type==='도도포인트');const hasJanggi=s.pays.some(p=>p.type==='장기방');const hasAmt=s.pays.some(p=>Number(p.amt||0)>0);return hasAmt||hasDodo||hasJanggi;}
+function hasSale(s){if(s.cancelled)return false;const isStaff=s.pays.some(p=>p.type==='직원숙소');if(isStaff)return false;const hasDodo=s.pays.some(p=>p.type==='도도포인트');const hasJanggi=s.pays.some(p=>p.type==='장기방');const hasService=s.pays.some(p=>p.type==='서비스');const hasAmt=s.pays.some(p=>Number(p.amt||0)>0);return hasAmt||hasDodo||hasJanggi||hasService;}
 function populateRoomSelects(){
   const rooms=getAllRooms();
   ['note-room-sel','claim-room-sel'].forEach(id=>{
@@ -489,7 +491,7 @@ function renderFloors(){
         const tot=s.pays.reduce((a,p)=>a+Number(p.amt||0),0);
         const chips=s.pays.map(p=>{const cls='chip chip-'+p.type.replace(/\s/g,'');if(p.type==='도도포인트'){return'<span class="'+cls+'"><span style="color:#4B7BEC">도도</span><span style="color:#A0A0A0">포인트</span></span>';}return'<span class="'+cls+'">'+p.type+(Number(p.amt||0)>0?' '+fmt(p.amt):'')+' </span>';}).join('');
         const restayChip=s.restay?`<span class="chip chip-재숙">재숙</span>`:'';
-        inner+=`<div class="sale-slot${s.cancelled?' cancelled':''}"><div style="display:flex;align-items:center;gap:4px"><div class="sale-price">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':'포인트 투숙'}</div>${restayChip}</div><div class="sale-guest">${s.guest||''}</div>${s.car?'<div class="sale-car"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg> '+s.car+'</div>':''}<div class="pay-chips">${chips}${s.cancelled?'<span class="chip chip-취소">취소</span>':''}</div></div>`;
+        inner+=`<div class="sale-slot${s.cancelled?' cancelled':''}"><div style="display:flex;align-items:center;gap:4px"><div class="sale-price">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':s.pays.some(p=>p.type==='서비스')?'서비스':'포인트 투숙'}</div>${restayChip}</div><div class="sale-guest">${s.guest||''}</div>${s.car?'<div class="sale-car"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg> '+s.car+'</div>':''}<div class="pay-chips">${chips}${s.cancelled?'<span class="chip chip-취소">취소</span>':''}</div></div>`;
       });
       card.innerHTML=inner;grid.appendChild(card);
     });
@@ -512,7 +514,7 @@ function renderViewMode(){
     const card=document.createElement('div');card.className='sale-card'+(isCancelled?' cancelled-card':'');
     const label=sales.length>1?`판매 ${si+1}번`:'판매 내역';const badge=isCancelled?` <span class="cancelled-badge">취소됨</span>`:'';
     card.innerHTML=`
-      <div class="sale-card-head ${isCancelled?'cancelled-head':'saved-head'}"><span>${label}${badge}</span><span style="font-size:11px">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':'포인트 투숙'}</span></div>
+      <div class="sale-card-head ${isCancelled?'cancelled-head':'saved-head'}"><span>${label}${badge}</span><span style="font-size:11px">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':s.pays.some(p=>p.type==='서비스')?'서비스':'포인트 투숙'}</span></div>
       <div class="sale-card-body"><div class="saved-view" id="sv-${si}"></div>
       ${!isCancelled&&!LOCKED?`<div class="saved-actions"><button class="btn btn-edit" style="font-size:11px;padding:5px 11px;flex:none" onclick="startEditSale(${si})">수정</button><button class="btn btn-cancel-sale" style="font-size:11px;padding:5px 11px;flex:none" onclick="openCancelModal('${currentRoom}',${si})">결제취소</button></div>`:isCancelled?`<div style="font-size:11px;color:#991B1B;margin-top:7px">취소사유: ${s.cancelReason||'-'} (${s.cancelledAt})</div>`:''}
       </div>`;
@@ -597,7 +599,7 @@ function saveEditedSales(){
   editSales.forEach((s,si)=>{
     s.pays.forEach((p,pi)=>{
       if(!p.type){hasError=true;const rows=document.querySelectorAll(`#eb-${si} .pay-row`);if(rows[pi]){const sel=rows[pi].querySelector('select');if(sel){sel.style.border='2px solid #EF4444';sel.focus();}}}
-      else if(!['도도포인트','장기방','직원숙소'].includes(p.type)&&Number(p.amt||0)<=0){hasError=true;const rows=document.querySelectorAll(`#eb-${si} .pay-row`);if(rows[pi]){const inp=rows[pi].querySelector('input[type=text]');if(inp){inp.style.border='2px solid #EF4444';inp.focus();}}}
+      else if(!['도도포인트','장기방','직원숙소','서비스'].includes(p.type)&&Number(p.amt||0)<=0){hasError=true;const rows=document.querySelectorAll(`#eb-${si} .pay-row`);if(rows[pi]){const inp=rows[pi].querySelector('input[type=text]');if(inp){inp.style.border='2px solid #EF4444';inp.focus();}}}
     });
   });
   if(hasError){alert('결제수단과 금액을 확인해주세요. (도도포인트는 금액 없이 가능)');return;}
@@ -651,6 +653,7 @@ function updateFinalSummary(){
     {label:'미수금',val:totals['미수금']||0,cls:'',vc:'미수금'},
     {label:'장기방',val:totals['장기방']||0,cls:'',vc:'장기방'},
     ...(currentHotel==='랜드호텔'?[{label:'직원숙소',val:totals['직원숙소']||0,cls:'',vc:'직원숙소'}]:[]),
+    {label:'서비스',val:totals['서비스']||0,cls:'',vc:'서비스'},
     {label:'기타',val:etcTotal,cls:'',vc:'기타'},
     {label:'지출 (현금)',val:exp.cash,cls:'fs-expense',vc:'red'},{label:'지출 (카드)',val:exp.card,cls:'fs-expense',vc:'red'},
     {label:'현금잔액',val:cashBalance,cls:'fs-balance',vc:cashBalance>=0?'green':'red'},
@@ -697,7 +700,7 @@ function showHistory(){
   content.innerHTML=cancelled.length===0?'<p style="font-size:13px;color:#6B7280;text-align:center;padding:1rem">취소 내역이 없습니다.</p>'
     :cancelled.map(c=>{const tot=c.pays.reduce((a,p)=>a+Number(p.amt||0),0);const chips=c.pays.map(p=>`<span class="chip chip-${p.type.replace(/\s/g,'')}">${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt):''}</span>`).join(' ');
       return `<div class="hist-item hist-cancelled"><div class="hist-row"><span><b>${c.rid}호</b></span><span class="cancelled-badge">취소</span></div>
-        <div class="hist-price">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':'포인트 투숙'}</div><div style="font-size:11px;margin:3px 0">${chips}</div>
+        <div class="hist-price">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':s.pays.some(p=>p.type==='서비스')?'서비스':'포인트 투숙'}</div><div style="font-size:11px;margin:3px 0">${chips}</div>
         <div style="font-size:11px;color:#6B7280">투숙객: ${c.guest||'-'}${c.car?' | 차번호: '+c.car:''} | 취소: ${c.cancelledAt||'-'}</div>
         <div style="font-size:11px;color:#991B1B;margin-top:3px">사유: ${c.cancelReason||'-'}</div></div>`;}).join('');
   document.getElementById('hist-modal').classList.add('show');
