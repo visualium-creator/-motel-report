@@ -162,7 +162,28 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .hist-item.hist-cancelled{border-color:#FECACA;background:#FEF2F2}
 .hist-row{display:flex;justify-content:space-between;color:var(--text3);margin-bottom:2px}
 .hist-price{font-size:14px;font-weight:600;color:var(--red);text-decoration:line-through}
+
+.pw-overlay{display:flex;position:fixed;inset:0;background:#F3F2EF;z-index:9999;align-items:center;justify-content:center}
+.pw-box{background:#fff;border:1px solid #E5E4E1;border-radius:12px;padding:2rem;width:320px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08)}
+.pw-title{font-size:18px;font-weight:700;color:#1A1A18;margin-bottom:.4rem}
+.pw-sub{font-size:13px;color:#7C7B77;margin-bottom:1.2rem}
+.pw-input{width:100%;font-size:15px;padding:9px 12px;border-radius:8px;border:1.5px solid #D1CFC9;text-align:center;letter-spacing:3px;margin-bottom:.8rem;outline:none}
+.pw-input:focus{border-color:#0F6E56}
+.pw-btn{width:100%;padding:10px;font-size:14px;font-weight:600;border-radius:8px;border:none;background:#0F6E56;color:#fff;cursor:pointer}
+.pw-btn:hover{opacity:.9}
+.pw-error{font-size:12px;color:#A32D2D;margin-top:.5rem;display:none}
 </style>
+
+
+<div class="pw-overlay" id="pw-overlay">
+  <div class="pw-box">
+    <div class="pw-title">🔐 랜드+스마트 보고서</div>
+    <div class="pw-sub">비밀번호를 입력하세요</div>
+    <input class="pw-input" type="password" id="pw-input" placeholder="●●●●" maxlength="20" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">확인</button>
+    <div class="pw-error" id="pw-error">비밀번호가 틀렸습니다</div>
+  </div>
+</div>
 
 <div class="wrap">
   <div class="page-title">랜드+스마트 일일보고서</div>
@@ -247,6 +268,31 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 </div>
 
 <script>
+
+const PW = '1234'; // 비밀번호 여기서 변경
+function checkPw(){
+  const input = document.getElementById('pw-input').value;
+  if(input === PW){
+    localStorage.setItem('motelAuth', btoa(PW + '_' + new Date().toDateString()));
+    document.getElementById('pw-overlay').style.display = 'none';
+    document.getElementById('pw-input').value = '';
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+function checkAuth(){
+  const auth = localStorage.getItem('motelAuth');
+  const expected = btoa(PW + '_' + new Date().toDateString());
+  if(auth !== expected){
+    document.getElementById('pw-overlay').style.display = 'flex';
+  } else {
+    document.getElementById('pw-overlay').style.display = 'none';
+  }
+}
+checkAuth();
+
 function buildRooms(hotel){
   const R={};
   if(hotel==='스마트호텔'){
