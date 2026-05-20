@@ -53,7 +53,7 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .sale-slot.cancelled{opacity:.5;text-decoration:line-through;background:#FEF2F2}
 .sale-price{font-size:15px;font-weight:600;color:var(--text)}
 .sale-guest{font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sale-car{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:2px;margin-top:4px}
+.sale-car{font-size:11px;color:var(--text3);margin-left:4px}
 .pay-chips{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
 .chip{font-size:10px;padding:2px 5px;border-radius:3px;font-weight:600}
 .chip-현금{background:#DCFCE7;color:#166534}
@@ -430,7 +430,7 @@ function renderFloors(){
         const tot=s.pays.reduce((a,p)=>a+Number(p.amt||0),0);
         const chips=s.pays.map(p=>`<span class="chip chip-${p.type.replace(/\s/g,'')}">${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt):'(포인트)'}</span>`).join('');
         const restayChip=s.restay?`<span class="chip chip-재숙">재숙</span>`:'';
-        inner+=`<div class="sale-slot${s.cancelled?' cancelled':''}"><div style="display:flex;align-items:center;gap:4px"><div class="sale-price">${tot>0?fmt(tot)+'원':'포인트 투숙'}</div>${restayChip}</div><div class="sale-guest">${s.guest||''}</div>${s.car?'<div class="sale-car">🚗 '+s.car+'</div>':''}<div class="pay-chips">${chips}${s.cancelled?'<span class="chip chip-취소">취소</span>':''}</div></div>`;
+        inner+=`<div class="sale-slot${s.cancelled?' cancelled':''}"><div style="display:flex;align-items:center;gap:4px"><div class="sale-price">${tot>0?fmt(tot)+'원':'포인트 투숙'}</div>${restayChip}</div><div class="sale-guest">${s.guest||''}${s.car?'<span class="sale-car"> 🚗 '+s.car+'</span>':''}</div><div class="pay-chips">${chips}${s.cancelled?'<span class="chip chip-취소">취소</span>':''}</div></div>`;
       });
       card.innerHTML=inner;grid.appendChild(card);
     });
