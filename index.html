@@ -101,12 +101,12 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .nc-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:0 2px}
 .empty-nc{font-size:11px;color:var(--text3);padding:10px 4px;text-align:center}
 .final-summary{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:.5rem}
-.fs-row{display:flex;justify-content:flex-start;align-items:center;padding:7px 14px;border-bottom:1px solid var(--border);font-size:13px;gap:12px}
+.fs-row{display:flex;justify-content:center;align-items:center;padding:7px 14px;border-bottom:1px solid var(--border);font-size:13px;gap:24px}
 .fs-row:last-child{border-bottom:none}
 .fs-row.fs-total{background:var(--bg2);font-weight:600}
 .fs-row.fs-expense{background:#FEF2F2}
 .fs-row.fs-balance{background:var(--green-bg);font-weight:600}
-.fs-label{color:var(--text3);font-size:12px;min-width:90px}
+.fs-label{color:var(--text3);font-size:12px;min-width:100px;text-align:right}
 .fs-val{font-weight:600;color:var(--text);font-size:13px}
 .fs-val.green{color:var(--green)}.fs-val.red{color:var(--red)}.fs-val.blue{color:var(--blue)}
 .fs-val.현금{color:#1A1A18}
@@ -424,13 +424,49 @@ function applyLockUI(){
   else{status.className='submit-status status-pending';status.textContent='미제출';btn.className='btn-submit';btn.textContent='제출';btn.disabled=false;info.innerHTML='당일 보고서 작성이 완료되면 제출 버튼을 눌러주세요.<br>제출 후에는 수정이 불가합니다.';}
 }
 function switchTab(hotel){
-  if(!LOCKED){saveCurrentExpenses();saveCurrentStaff();}
+  if(!LOCKED){
+    const db=loadDb();const k=getKey();
+    if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};
+    db[k].expenses=[];
+    document.querySelectorAll('#expenses .exp-row').forEach(row=>{
+      const name=row.querySelector('.exp-name')?.value||'';
+      const amt=Number(row.querySelector('.exp-amt')?.value||0);
+      const type=row.querySelector('.exp-type')?.value||'';
+      if(name||amt)db[k].expenses.push({name,amt,type});
+    });
+    db[k].staff.am=document.getElementById('s-am').value;
+    db[k].staff.day=document.getElementById('s-day').value;
+    db[k].staff.night=document.getElementById('s-night').value;
+    saveDb(db);
+  }
   currentHotel=hotel;
   document.getElementById('tab-land').className='tab-btn'+(hotel==='랜드호텔'?' land-active':'');
   document.getElementById('tab-smart').className='tab-btn'+(hotel==='스마트호텔'?' smart-active':'');
   loadPage();
 }
-document.getElementById('date-sel').addEventListener('change',()=>{if(!LOCKED){saveCurrentExpenses();saveCurrentStaff();}loadPage();});
+document.getElementById('date-sel').addEventListener('change',function(){
+  const prevDate=this._prevDate||todayStr;
+  const prevKey=prevDate+'__'+currentHotel;
+  if(!LOCKED){
+    // 이전 날짜 키로 저장
+    const db=loadDb();
+    if(!db[prevKey])db[prevKey]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};
+    db[prevKey].expenses=[];
+    document.querySelectorAll('#expenses .exp-row').forEach(row=>{
+      const name=row.querySelector('.exp-name')?.value||'';
+      const amt=Number(row.querySelector('.exp-amt')?.value||0);
+      const type=row.querySelector('.exp-type')?.value||'';
+      if(name||amt)db[prevKey].expenses.push({name,amt,type});
+    });
+    db[prevKey].staff.am=document.getElementById('s-am').value;
+    db[prevKey].staff.day=document.getElementById('s-day').value;
+    db[prevKey].staff.night=document.getElementById('s-night').value;
+    saveDb(db);
+  }
+  this._prevDate=this.value;
+  loadPage();
+});
+document.getElementById('date-sel')._prevDate=todayStr;
 function saveCurrentStaff(){if(LOCKED)return;const db=loadDb();const k=getKey();if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};db[k].staff.am=document.getElementById('s-am').value;db[k].staff.day=document.getElementById('s-day').value;db[k].staff.night=document.getElementById('s-night').value;saveDb(db);}
 function saveCurrentExpenses(){
   if(LOCKED)return;
