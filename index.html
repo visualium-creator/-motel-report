@@ -56,14 +56,14 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .sale-car{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px;margin-top:4px;line-height:1}
 .pay-chips{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
 .chip{font-size:10px;padding:2px 5px;border-radius:3px;font-weight:600}
-.chip-현금{background:#DCFCE7;color:#166534}
-.chip-카드{background:#DBEAFE;color:#1D4ED8}
-.chip-NOL{background:#FEF3C7;color:#92400E}
-.chip-여기어때{background:#FCE7F3;color:#9D174D}
-.chip-통장{background:#D1FAE5;color:#065F46}
-.chip-도도포인트{background:#FFEDD5;color:#9A3412}
-.chip-미수금{background:#FEF3C7;color:#7C2D12}
-.chip-기타{background:#F8FAFC;color:#475569}
+.chip-현금{background:#F7F7F5;color:#1A1A18}
+.chip-카드{background:#FFF0F0;color:#CC0000}
+.chip-NOL{background:#E6F0FF;color:#0066CC}
+.chip-여기어때{background:#FFF0F3;color:#FF2B4A}
+.chip-통장{background:#F3EEFF;color:#5B21B6}
+.chip-도도포인트{background:#FFF4EC;color:#FF6B00}
+.chip-미수금{background:#FCEBEB;color:#A32D2D}
+.chip-기타{background:#F7F7F5;color:#4B4A47}
 .chip-취소{background:#FEE2E2;color:#991B1B}
 .chip-재숙{background:#EDE9FE;color:#5B21B6}
 .empty-room{height:58px}
@@ -107,6 +107,14 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .fs-label{color:var(--text3);font-size:12px}
 .fs-val{font-weight:600;color:var(--text);font-size:13px}
 .fs-val.green{color:var(--green)}.fs-val.red{color:var(--red)}.fs-val.blue{color:var(--blue)}
+.fs-val.현금{color:#1A1A18}
+.fs-val.카드{color:#CC0000}
+.fs-val.NOL{color:#0066CC}
+.fs-val.여기어때{color:#FF2B4A}
+.fs-val.통장{color:#5B21B6}
+.fs-val.도도포인트{color:#FF6B00}
+.fs-val.미수금{color:#A32D2D}
+.fs-val.기타{color:#4B4A47}
 .submit-area{margin-top:1.25rem;padding:1.1rem 1.25rem;background:var(--bg);border:1px solid var(--border);border-radius:9px}
 .submit-area-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
 .submit-title{font-size:13px;font-weight:600;color:var(--text)}
@@ -623,12 +631,14 @@ function updateFinalSummary(){
   const etcTotal=etcPays.reduce((a,p)=>a+(totals[p]||0),0);
   const rows=[
     {label:`총 매출 <span style="font-size:11px;font-weight:400">(${count}실)</span>`,val:grandTotal,cls:'fs-total',vc:'green'},
-    {label:'현금',val:totals['현금']||0,cls:'',vc:''},{label:'카드',val:totals['카드']||0,cls:'',vc:'blue'},
-    {label:'NOL',val:totals['NOL']||0,cls:'',vc:''},{label:'여기어때',val:totals['여기어때']||0,cls:'',vc:''},
-    {label:'통장',val:totals['통장']||0,cls:'',vc:''},
-    ...(currentHotel==='랜드호텔'?[{label:'도도포인트',val:totals['도도포인트']||0,cls:'',vc:''}]:[]),
-    {label:'미수금',val:totals['미수금']||0,cls:'',vc:'red'},
-    {label:'기타',val:etcTotal,cls:'',vc:''},
+    {label:'현금',val:totals['현금']||0,cls:'',vc:'현금'},
+    {label:'카드',val:totals['카드']||0,cls:'',vc:'카드'},
+    {label:'NOL',val:totals['NOL']||0,cls:'',vc:'NOL'},
+    {label:'여기어때',val:totals['여기어때']||0,cls:'',vc:'여기어때'},
+    {label:'통장',val:totals['통장']||0,cls:'',vc:'통장'},
+    ...(currentHotel==='랜드호텔'?[{label:'도도포인트',val:totals['도도포인트']||0,cls:'',vc:'도도포인트'}]:[]),
+    {label:'미수금',val:totals['미수금']||0,cls:'',vc:'미수금'},
+    {label:'기타',val:etcTotal,cls:'',vc:'기타'},
     {label:'지출 (현금)',val:exp.cash,cls:'fs-expense',vc:'red'},{label:'지출 (카드)',val:exp.card,cls:'fs-expense',vc:'red'},
     {label:'현금잔액',val:cashBalance,cls:'fs-balance',vc:cashBalance>=0?'green':'red'},
   ];
