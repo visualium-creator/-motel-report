@@ -476,7 +476,7 @@ function renderFloors(){
         const tot=s.pays.reduce((a,p)=>a+Number(p.amt||0),0);
         const chips=s.pays.map(p=>`<span class="chip chip-${p.type.replace(/\s/g,'')}">${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt):'(포인트)'}</span>`).join('');
         const restayChip=s.restay?`<span class="chip chip-재숙">재숙</span>`:'';
-        inner+=`<div class="sale-slot${s.cancelled?' cancelled':''}"><div style="display:flex;align-items:center;gap:4px"><div class="sale-price">${tot>0?fmt(tot)+'원':'포인트 투숙'}</div>${restayChip}</div><div class="sale-guest">${s.guest||''}</div>${s.car?'<div class="sale-car">🚗 '+s.car+'</div>':''}<div class="pay-chips">${chips}${s.cancelled?'<span class="chip chip-취소">취소</span>':''}</div></div>`;
+        inner+=`<div class="sale-slot${s.cancelled?' cancelled':''}"><div style="display:flex;align-items:center;gap:4px"><div class="sale-price">${tot>0?fmt(tot)+'원':'포인트 투숙'}</div>${restayChip}</div><div class="sale-guest">${s.guest||''}</div>${s.car?'<div class="sale-car"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg> '+s.car+'</div>':''}<div class="pay-chips">${chips}${s.cancelled?'<span class="chip chip-취소">취소</span>':''}</div></div>`;
       });
       card.innerHTML=inner;grid.appendChild(card);
     });
