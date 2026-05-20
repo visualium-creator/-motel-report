@@ -152,7 +152,7 @@ input,select,textarea,button{font-family:inherit}
 .pay-row input[type=text]{flex:1;font-size:13px;padding:5px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text)}
 .del-pay{background:none;border:none;cursor:pointer;color:var(--text3);font-size:15px;padding:0 2px;flex-shrink:0}
 .add-pay-btn{font-size:11px;padding:4px 10px;border-radius:6px;border:1px dashed var(--border2);background:var(--bg2);color:var(--text3);cursor:pointer;margin-bottom:7px}
-.cb-row{display:flex;gap:14px;margin-bottom:9px}
+.cb-row{display:flex;gap:14px;margin-bottom:9px;align-items:center}
 .cb-row label{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2);cursor:pointer}
 .modal-btns{display:flex;gap:7px;margin-top:.9rem}
 .btn{flex:1;padding:7px;font-size:13px;border-radius:7px;border:1px solid var(--border2);cursor:pointer;background:var(--bg);color:var(--text);font-weight:500}
@@ -571,7 +571,7 @@ function renderEditMode(){
         <div class="fg"><label>투숙객명</label><input type="text" value="${s.guest||''}" placeholder="" oninput="editSales[${si}].guest=this.value"></div>
         <div class="fg"><label>차량번호</label><input type="text" value="${s.car||''}" placeholder="" oninput="editSales[${si}].car=this.value"></div>
       </div>
-      <div class="fg"><label>체크인 시간</label><select id="ck-${si}" onchange="editSales[${si}].checkin=this.value"></div>
+      <div class="fg"><label>체크인 시간</label><select id="ck-${si}" onchange="editSales[${si}].checkin=this.value"></select></div>
       <div class="cb-row"><label><input type="checkbox" ${s.restay?'checked':''} onchange="editSales[${si}].restay=this.checked"> 재숙</label></div>
       <div class="fg"><label>클레임</label><textarea placeholder="" oninput="editSales[${si}].claim=this.value">${s.claim||''}</textarea></div>
       <div class="fg"><label>특이사항</label><textarea placeholder="" oninput="editSales[${si}].note=this.value">${s.note||''}</textarea></div>`;
