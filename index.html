@@ -327,15 +327,17 @@ const PAYS={
   '랜드호텔':['현금','카드','NOL','여기어때','통장','도도포인트','미수금','기타']
 };
 
-let db={},currentHotel='랜드호텔',currentRoom=null,modalMode='edit',editSales=[],pendingCancel={};
+let currentHotel='랜드호텔',currentRoom=null,modalMode='edit',editSales=[],pendingCancel={};
 let LOCKED=false;
 const today=new Date(),todayStr=today.toISOString().slice(0,10);
 document.getElementById('date-sel').value=todayStr;
 function getDate(){return document.getElementById('date-sel').value;}
 function getKey(){return getDate()+'__'+currentHotel;}
 function isFutureDate(){return getDate()>todayStr;}
-function ensureData(){const k=getKey();if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};return db[k];}
-function getData(){return ensureData();}
+function loadDb(){try{return JSON.parse(localStorage.getItem('motelDb')||'{}');}catch(e){return {};}}
+function saveDb(db){try{localStorage.setItem('motelDb',JSON.stringify(db));}catch(e){}}
+function ensureData(){const db=loadDb();const k=getKey();if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};saveDb(db);return db[k];}
+function getData(){const db=loadDb();const k=getKey();if(!db[k])return ensureData();return db[k];}
 function fmt(n){return Number(n||0).toLocaleString();}
 function newSale(){return{pays:[{type:'',amt:''}],guest:'',car:'',checkin:'11:00',restay:false,claim:'',note:'',cancelled:false,cancelReason:'',cancelledAt:'',savedAt:''};}
 function nowStr(){const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
@@ -372,13 +374,16 @@ function switchTab(hotel){
   loadPage();
 }
 document.getElementById('date-sel').addEventListener('change',()=>{if(!LOCKED){saveCurrentExpenses();saveCurrentStaff();}loadPage();});
-function saveCurrentStaff(){if(LOCKED)return;const d=getData();d.staff.am=document.getElementById('s-am').value;d.staff.day=document.getElementById('s-day').value;d.staff.night=document.getElementById('s-night').value;}
+function saveCurrentStaff(){if(LOCKED)return;const db=loadDb();const k=getKey();if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};db[k].staff.am=document.getElementById('s-am').value;db[k].staff.day=document.getElementById('s-day').value;db[k].staff.night=document.getElementById('s-night').value;saveDb(db);}
 function saveCurrentExpenses(){
-  if(LOCKED)return;const d=getData();d.expenses=[];
+  if(LOCKED)return;
+  const db=loadDb();const k=getKey();if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};
+  db[k].expenses=[];
   document.querySelectorAll('#expenses .exp-row').forEach(row=>{
     const name=row.querySelector('.exp-name')?.value||'';const amt=Number(row.querySelector('.exp-amt')?.value||0);const type=row.querySelector('.exp-type')?.value||'';
-    if(name||amt)d.expenses.push({name,amt,type});
+    if(name||amt)db[k].expenses.push({name,amt,type});
   });
+  saveDb(db);
 }
 function loadPage(){
   refreshLockState();const d=getData();
@@ -530,8 +535,10 @@ function saveEditedSales(){
     });
   });
   if(hasError){alert('결제수단과 금액을 확인해주세요. (도도포인트는 금액 없이 가능)');return;}
-  const d=getData();if(!d.rooms[currentRoom])d.rooms[currentRoom]=[];
-  editSales.forEach(s=>{s.savedAt=nowStr();if(s._editIdx!==undefined){d.rooms[currentRoom][s._editIdx]=s;delete d.rooms[currentRoom][s._editIdx]._editIdx;}else{delete s._isNew;d.rooms[currentRoom].push(s);}});
+  const db2=loadDb();const k2=getKey();if(!db2[k2])db2[k2]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};
+  if(!db2[k2].rooms[currentRoom])db2[k2].rooms[currentRoom]=[];
+  editSales.forEach(s=>{s.savedAt=nowStr();if(s._editIdx!==undefined){db2[k2].rooms[currentRoom][s._editIdx]=s;delete db2[k2].rooms[currentRoom][s._editIdx]._editIdx;}else{delete s._isNew;db2[k2].rooms[currentRoom].push(s);}});
+  saveDb(db2);
   modalMode='view';renderViewMode();renderFloors();updateFinalSummary();renderNotesClaims();
 }
 function openCancelModal(roomId,saleIdx){
@@ -544,7 +551,9 @@ function closeCancelModal(){document.getElementById('cancel-modal').classList.re
 function confirmCancel(){
   if(LOCKED)return;const reason=document.getElementById('cancel-reason').value.trim();if(!reason){alert('취소 사유를 입력해주세요.');return;}
   const{roomId,saleIdx}=pendingCancel;const s=getData().rooms[roomId][saleIdx];
-  s.cancelled=true;s.cancelReason=reason;s.cancelledAt=nowStr();
+  const dbC=loadDb();const kC=getKey();
+  dbC[kC].rooms[roomId][saleIdx].cancelled=true;dbC[kC].rooms[roomId][saleIdx].cancelReason=reason;dbC[kC].rooms[roomId][saleIdx].cancelledAt=nowStr();
+  saveDb(dbC);
   closeCancelModal();renderViewMode();renderFloors();updateFinalSummary();renderNotesClaims();
 }
 document.getElementById('cancel-modal').addEventListener('click',function(e){if(e.target===this)closeCancelModal();});
@@ -592,9 +601,9 @@ function renderNotesClaims(){
   document.getElementById('claim-items').innerHTML=ac.length===0?'<div class="empty-nc">입력된 클레임이 없습니다</div>'
     :ac.map((c,i)=>{const bc=c.source==='room'?'claim-badge':'direct-badge';const bt=c.source==='room'?c.roomId+'호':'직접';return `<div class="nc-item"><span class="nc-room-badge ${bc}">${bt}</span><span class="nc-text">${c.text}</span>${c.source==='extra'&&!LOCKED?`<button class="nc-del" onclick="delExtra('claim',${i},${rc.length})">✕</button>`:''}</div>`;}).join('');
 }
-function addNoteDirectly(){if(LOCKED)return;const roomId=document.getElementById('note-room-sel').value;const text=document.getElementById('note-input').value.trim();if(!text)return;const d=getData();if(!d.notes)d.notes=[];d.notes.push({roomId:roomId==='direct'?'':roomId,text});document.getElementById('note-input').value='';renderNotesClaims();}
-function addClaimDirectly(){if(LOCKED)return;const roomId=document.getElementById('claim-room-sel').value;const text=document.getElementById('claim-input').value.trim();if(!text)return;const d=getData();if(!d.claims)d.claims=[];d.claims.push({roomId:roomId==='direct'?'':roomId,text});document.getElementById('claim-input').value='';renderNotesClaims();}
-function delExtra(type,allIdx,roomCount){if(LOCKED)return;const d=getData();const ei=allIdx-roomCount;if(type==='note')d.notes.splice(ei,1);else d.claims.splice(ei,1);renderNotesClaims();}
+function addNoteDirectly(){if(LOCKED)return;const roomId=document.getElementById('note-room-sel').value;const text=document.getElementById('note-input').value.trim();if(!text)return;const dbN=loadDb();const kN=getKey();if(!dbN[kN].notes)dbN[kN].notes=[];dbN[kN].notes.push({roomId:roomId==='direct'?'':roomId,text});saveDb(dbN);document.getElementById('note-input').value='';renderNotesClaims();}
+function addClaimDirectly(){if(LOCKED)return;const roomId=document.getElementById('claim-room-sel').value;const text=document.getElementById('claim-input').value.trim();if(!text)return;const dbCl=loadDb();const kCl=getKey();if(!dbCl[kCl].claims)dbCl[kCl].claims=[];dbCl[kCl].claims.push({roomId:roomId==='direct'?'':roomId,text});saveDb(dbCl);document.getElementById('claim-input').value='';renderNotesClaims();}
+function delExtra(type,allIdx,roomCount){if(LOCKED)return;const dbD=loadDb();const kD=getKey();const ei=allIdx-roomCount;if(type==='note')dbD[kD].notes.splice(ei,1);else dbD[kD].claims.splice(ei,1);saveDb(dbD);renderNotesClaims();}
 async function submitReport(){
   if(LOCKED)return;
   saveCurrentExpenses();saveCurrentStaff();
@@ -631,7 +640,7 @@ async function submitReport(){
     });
     const result=await res.json();
     if(result.success){
-      d.submitted=true;d.submittedAt=nowStr();loadPage();
+      const dbS=loadDb();const kS=getKey();dbS[kS].submitted=true;dbS[kS].submittedAt=nowStr();saveDb(dbS);loadPage();
       alert('✅ 에어테이블 전송 완료!');
     } else {
       throw new Error(JSON.stringify(result));
