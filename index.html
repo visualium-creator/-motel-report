@@ -209,17 +209,17 @@ input,select,textarea,button{font-family:inherit}
     <button class="tab-btn" id="tab-smart" onclick="switchTab('스마트호텔')">스마트호텔</button>
   </div>
   <div class="staff-row">
-    <div class="staff-item"><span>오전</span><input type="text" id="s-am" placeholder="담당자"></div>
-    <div class="staff-item"><span>주간</span><input type="text" id="s-day" placeholder="담당자"></div>
-    <div class="staff-item"><span>야간</span><input type="text" id="s-night" placeholder="담당자"></div>
+    <div class="staff-item"><span>오전</span><input type="text" id="s-am" placeholder=""></div>
+    <div class="staff-item"><span>주간</span><input type="text" id="s-day" placeholder=""></div>
+    <div class="staff-item"><span>야간</span><input type="text" id="s-night" placeholder=""></div>
   </div>
   <div id="floors"></div>
   <div class="section-title">지출내역</div>
   <div class="exp-wrap">
     <div class="nc-input-area" id="exp-input-area">
       <div class="exp-row" style="margin-bottom:0">
-        <input class="exp-name" type="text" id="exp-name-input" placeholder="지출항목">
-        <input class="exp-amt" type="number" id="exp-amt-input" placeholder="금액" step="1000">
+        <input class="exp-name" type="text" id="exp-name-input" placeholder="">
+        <input class="exp-amt" type="number" id="exp-amt-input" placeholder="" step="1000">
         <select class="exp-type" id="exp-type-input">
           <option value="">형태</option>
           <option value="현금">현금</option>
@@ -236,7 +236,7 @@ input,select,textarea,button{font-family:inherit}
       <div class="nc-panel-head note-head"><span>특이사항</span><span id="note-count" style="font-size:10px;font-weight:500">0건</span></div>
       <div class="nc-input-area" id="note-input-area">
         <div class="nc-input-row1"><select class="nc-room-sel" id="note-room-sel"><option value="direct">직접입력</option></select></div>
-        <div class="nc-input-row2"><input class="nc-text-input" type="text" id="note-input" placeholder="특이사항 내용 입력"><button class="nc-add-btn" onclick="addNoteDirectly()">추가</button></div>
+        <div class="nc-input-row2"><input class="nc-text-input" type="text" id="note-input" placeholder=""><button class="nc-add-btn" onclick="addNoteDirectly()">추가</button></div>
       </div>
       <div class="nc-items" id="note-items"><div class="empty-nc">입력된 특이사항이 없습니다</div></div>
     </div>
@@ -244,7 +244,7 @@ input,select,textarea,button{font-family:inherit}
       <div class="nc-panel-head claim-head"><span>객실 클레임</span><span id="claim-count" style="font-size:10px;font-weight:500">0건</span></div>
       <div class="nc-input-area" id="claim-input-area">
         <div class="nc-input-row1"><select class="nc-room-sel" id="claim-room-sel"><option value="direct">직접입력</option></select></div>
-        <div class="nc-input-row2"><input class="nc-text-input" type="text" id="claim-input" placeholder="클레임 내용 입력"><button class="nc-add-btn" onclick="addClaimDirectly()">추가</button></div>
+        <div class="nc-input-row2"><input class="nc-text-input" type="text" id="claim-input" placeholder=""><button class="nc-add-btn" onclick="addClaimDirectly()">추가</button></div>
       </div>
       <div class="nc-items" id="claim-items"><div class="empty-nc">입력된 클레임이 없습니다</div></div>
     </div>
@@ -568,13 +568,13 @@ function renderEditMode(){
     const rest=document.createElement('div');
     rest.innerHTML=`
       <div class="fg-row">
-        <div class="fg"><label>투숙객명</label><input type="text" value="${s.guest||''}" placeholder="성명" oninput="editSales[${si}].guest=this.value"></div>
-        <div class="fg"><label>차량번호</label><input type="text" value="${s.car||''}" placeholder="12가 3456" oninput="editSales[${si}].car=this.value"></div>
+        <div class="fg"><label>투숙객명</label><input type="text" value="${s.guest||''}" placeholder="" oninput="editSales[${si}].guest=this.value"></div>
+        <div class="fg"><label>차량번호</label><input type="text" value="${s.car||''}" placeholder="" oninput="editSales[${si}].car=this.value"></div>
       </div>
       <div class="fg"><label>체크인 시간</label><input type="time" value="${s.checkin||'11:00'}" oninput="editSales[${si}].checkin=this.value"></div>
       <div class="cb-row"><label><input type="checkbox" ${s.restay?'checked':''} onchange="editSales[${si}].restay=this.checked"> 재숙</label></div>
-      <div class="fg"><label>클레임</label><textarea placeholder="클레임 내용" oninput="editSales[${si}].claim=this.value">${s.claim||''}</textarea></div>
-      <div class="fg"><label>특이사항</label><textarea placeholder="특이사항" oninput="editSales[${si}].note=this.value">${s.note||''}</textarea></div>`;
+      <div class="fg"><label>클레임</label><textarea placeholder="" oninput="editSales[${si}].claim=this.value">${s.claim||''}</textarea></div>
+      <div class="fg"><label>특이사항</label><textarea placeholder="" oninput="editSales[${si}].note=this.value">${s.note||''}</textarea></div>`;
     eb.appendChild(rest);
   });
   const btns=document.createElement('div');btns.className='modal-btns';
