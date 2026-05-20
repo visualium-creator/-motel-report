@@ -61,7 +61,7 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .chip-NOL{background:#E6F0FF;color:#0066CC}
 .chip-여기어때{background:#FFF0F3;color:#FF2B4A}
 .chip-통장{background:#F3EEFF;color:#5B21B6}
-.chip-도도포인트{background:#FFF4EC;color:#FF6B00}
+.chip-도도포인트{background:#F0F4FF;color:#4B7BEC}
 .chip-미수금{background:#FCEBEB;color:#A32D2D}
 .chip-기타{background:#F7F7F5;color:#4B4A47}
 .chip-취소{background:#FEE2E2;color:#991B1B}
@@ -112,7 +112,7 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .fs-val.NOL{color:#0066CC}
 .fs-val.여기어때{color:#FF2B4A}
 .fs-val.통장{color:#5B21B6}
-.fs-val.도도포인트{color:#FF6B00}
+.fs-val.도도포인트{color:#4B7BEC}
 .fs-val.미수금{color:#A32D2D}
 .fs-val.기타{color:#4B4A47}
 .submit-area{margin-top:1.25rem;padding:1.1rem 1.25rem;background:var(--bg);border:1px solid var(--border);border-radius:9px}
@@ -480,7 +480,7 @@ function renderFloors(){
       if(!sales.length){inner+=`<div class="empty-room"></div>`;}
       else sales.forEach(s=>{
         const tot=s.pays.reduce((a,p)=>a+Number(p.amt||0),0);
-        const chips=s.pays.map(p=>`<span class="chip chip-${p.type.replace(/\s/g,'')}">${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt):'(포인트)'}</span>`).join('');
+        const chips=s.pays.map(p=>{const cls=`chip chip-${p.type.replace(/\s/g,'')}`;if(p.type==='도도포인트'){return`<span class="${cls}"><span style="color:#4B7BEC">도도</span><span style="color:#A0A0A0">포인트</span></span>`;}return`<span class="${cls}">${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt):'(포인트)'}</span>`;}).join('');
         const restayChip=s.restay?`<span class="chip chip-재숙">재숙</span>`:'';
         inner+=`<div class="sale-slot${s.cancelled?' cancelled':''}"><div style="display:flex;align-items:center;gap:4px"><div class="sale-price">${tot>0?fmt(tot)+'원':'포인트 투숙'}</div>${restayChip}</div><div class="sale-guest">${s.guest||''}</div>${s.car?'<div class="sale-car"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg> '+s.car+'</div>':''}<div class="pay-chips">${chips}${s.cancelled?'<span class="chip chip-취소">취소</span>':''}</div></div>`;
       });
