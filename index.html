@@ -100,8 +100,8 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .nc-text{flex:1;color:var(--text);line-height:1.5}
 .nc-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:0 2px}
 .empty-nc{font-size:11px;color:var(--text3);padding:10px 4px;text-align:center}
-.final-summary{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:.5rem}
-.fs-row{display:flex;justify-content:center;align-items:center;padding:7px 14px;border-bottom:1px solid var(--border);font-size:13px;gap:24px}
+.final-summary{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:.5rem;width:480px;margin-left:auto;margin-right:auto}
+.fs-row{display:flex;justify-content:center;align-items:center;padding:7px 14px;border-bottom:1px solid var(--border);font-size:13px;gap:48px}
 .fs-row:last-child{border-bottom:none}
 .fs-row.fs-total{background:var(--bg2);font-weight:600}
 .fs-row.fs-expense{background:#FEF2F2}
@@ -522,7 +522,7 @@ function renderFloors(){
         const tot=s.pays.reduce((a,p)=>a+Number(p.amt||0),0);
         const chips=s.pays.map(p=>{const cls=`chip chip-${p.type.replace(/\s/g,'')}`;if(p.type==='도도포인트'){return`<span class="${cls}"><span style="color:#4B7BEC">도도</span><span style="color:#A0A0A0">포인트</span></span>`;}return`<span class="${cls}">${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt):'(포인트)'}</span>`;}).join('');
         const restayChip=s.restay?`<span class="chip chip-재숙">재숙</span>`:'';
-        inner+=`<div class="sale-slot${s.cancelled?' cancelled':''}"><div style="display:flex;align-items:center;gap:4px"><div class="sale-price">${tot>0?fmt(tot)+'원':'포인트 투숙'}</div>${restayChip}</div><div class="sale-guest">${s.guest||''}</div>${s.car?'<div class="sale-car"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg> '+s.car+'</div>':''}<div class="pay-chips">${chips}${s.cancelled?'<span class="chip chip-취소">취소</span>':''}</div></div>`;
+        inner+=`<div class="sale-slot${s.cancelled?' cancelled':''}"><div style="display:flex;align-items:center;gap:4px"><div class="sale-price">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':'포인트 투숙'}</div>${restayChip}</div><div class="sale-guest">${s.guest||''}</div>${s.car?'<div class="sale-car"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg> '+s.car+'</div>':''}<div class="pay-chips">${chips}${s.cancelled?'<span class="chip chip-취소">취소</span>':''}</div></div>`;
       });
       card.innerHTML=inner;grid.appendChild(card);
     });
@@ -545,7 +545,7 @@ function renderViewMode(){
     const card=document.createElement('div');card.className='sale-card'+(isCancelled?' cancelled-card':'');
     const label=sales.length>1?`판매 ${si+1}번`:'판매 내역';const badge=isCancelled?` <span class="cancelled-badge">취소됨</span>`:'';
     card.innerHTML=`
-      <div class="sale-card-head ${isCancelled?'cancelled-head':'saved-head'}"><span>${label}${badge}</span><span style="font-size:11px">${tot>0?fmt(tot)+'원':'포인트 투숙'}</span></div>
+      <div class="sale-card-head ${isCancelled?'cancelled-head':'saved-head'}"><span>${label}${badge}</span><span style="font-size:11px">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':'포인트 투숙'}</span></div>
       <div class="sale-card-body"><div class="saved-view" id="sv-${si}"></div>
       ${!isCancelled&&!LOCKED?`<div class="saved-actions"><button class="btn btn-edit" style="font-size:11px;padding:5px 11px;flex:none" onclick="startEditSale(${si})">수정</button><button class="btn btn-cancel-sale" style="font-size:11px;padding:5px 11px;flex:none" onclick="openCancelModal('${currentRoom}',${si})">결제취소</button></div>`:isCancelled?`<div style="font-size:11px;color:#991B1B;margin-top:7px">취소사유: ${s.cancelReason||'-'} (${s.cancelledAt})</div>`:''}
       </div>`;
@@ -754,7 +754,7 @@ function showHistory(){
   content.innerHTML=cancelled.length===0?'<p style="font-size:13px;color:#6B7280;text-align:center;padding:1rem">취소 내역이 없습니다.</p>'
     :cancelled.map(c=>{const tot=c.pays.reduce((a,p)=>a+Number(p.amt||0),0);const chips=c.pays.map(p=>`<span class="chip chip-${p.type.replace(/\s/g,'')}">${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt):''}</span>`).join(' ');
       return `<div class="hist-item hist-cancelled"><div class="hist-row"><span><b>${c.rid}호</b></span><span class="cancelled-badge">취소</span></div>
-        <div class="hist-price">${tot>0?fmt(tot)+'원':'포인트 투숙'}</div><div style="font-size:11px;margin:3px 0">${chips}</div>
+        <div class="hist-price">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':'포인트 투숙'}</div><div style="font-size:11px;margin:3px 0">${chips}</div>
         <div style="font-size:11px;color:#6B7280">투숙객: ${c.guest||'-'}${c.car?' | 차번호: '+c.car:''} | 취소: ${c.cancelledAt||'-'}</div>
         <div style="font-size:11px;color:#991B1B;margin-top:3px">사유: ${c.cancelReason||'-'}</div></div>`;}).join('');
   document.getElementById('hist-modal').classList.add('show');
