@@ -64,6 +64,8 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .chip-도도포인트{background:#F0F4FF;color:#4B7BEC}
 .chip-미수금{background:#FCEBEB;color:#A32D2D}
 .chip-기타{background:#F7F7F5;color:#4B4A47}
+.chip-장기방{background:#F0FDF4;color:#166534}
+.chip-직원숙소{background:#F1F5F9;color:#475569}
 .chip-취소{background:#FEE2E2;color:#991B1B}
 .chip-재숙{background:#EDE9FE;color:#5B21B6}
 .empty-room{height:58px}
@@ -99,12 +101,12 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .nc-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:0 2px}
 .empty-nc{font-size:11px;color:var(--text3);padding:10px 4px;text-align:center}
 .final-summary{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:.5rem}
-.fs-row{display:flex;justify-content:space-between;align-items:center;padding:7px 14px;border-bottom:1px solid var(--border);font-size:13px}
+.fs-row{display:flex;justify-content:flex-start;align-items:center;padding:7px 14px;border-bottom:1px solid var(--border);font-size:13px;gap:12px}
 .fs-row:last-child{border-bottom:none}
 .fs-row.fs-total{background:var(--bg2);font-weight:600}
 .fs-row.fs-expense{background:#FEF2F2}
 .fs-row.fs-balance{background:var(--green-bg);font-weight:600}
-.fs-label{color:var(--text3);font-size:12px}
+.fs-label{color:var(--text3);font-size:12px;min-width:90px}
 .fs-val{font-weight:600;color:var(--text);font-size:13px}
 .fs-val.green{color:var(--green)}.fs-val.red{color:var(--red)}.fs-val.blue{color:var(--blue)}
 .fs-val.현금{color:#1A1A18}
@@ -115,6 +117,8 @@ body,html{background:#F3F2EF;font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .fs-val.도도포인트{color:#4B7BEC}
 .fs-val.미수금{color:#A32D2D}
 .fs-val.기타{color:#4B4A47}
+.fs-val.장기방{color:#166534}
+.fs-val.직원숙소{color:#475569}
 .submit-area{margin-top:1.25rem;padding:1.1rem 1.25rem;background:var(--bg);border:1px solid var(--border);border-radius:9px}
 .submit-area-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
 .submit-title{font-size:13px;font-weight:600;color:var(--text)}
@@ -332,8 +336,8 @@ function buildRooms(hotel){
     R['205']={type:'킹',nosmoking:true,floor:'2층'};
     ['206','207'].forEach(r=>R[r]={type:'더블',nosmoking:true,floor:'2층'});
   } else {
-    ['1001','1002','1003','1005','1006','1007','1008','1009','1010'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'10층'});
-    R['1011']={type:'PH',nosmoking:false,floor:'10층'};
+    ['1001','1002','1003','1005','1006','1007','1008','1009','1010'].forEach(r=>R[r]={type:'더블',nosmoking:true,floor:'10층'});
+    R['1011']={type:'PH',nosmoking:true,floor:'10층'};
     ['901','902','903','905','906','907','908','909','910'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'9층'});
     R['101']={type:'S',nosmoking:false,floor:'9층'};
     ['801','802','803','805','806','807','808','809','810'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'8층'});
@@ -377,8 +381,8 @@ const FLOORS={
 
 // 장기 제거
 const PAYS={
-  '스마트호텔':['현금','카드','NOL','여기어때','통장','미수금','기타'],
-  '랜드호텔':['현금','카드','NOL','여기어때','통장','도도포인트','미수금','기타']
+  '스마트호텔':['현금','카드','NOL','여기어때','통장','미수금','장기방','기타'],
+  '랜드호텔':['현금','카드','NOL','여기어때','통장','도도포인트','미수금','장기방','직원숙소','기타']
 };
 
 let currentHotel='랜드호텔',currentRoom=null,modalMode='edit',editSales=[],pendingCancel={};
@@ -397,7 +401,7 @@ function newSale(){return{pays:[{type:'',amt:''}],guest:'',car:'',checkin:'11:00
 function nowStr(){const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
 function getRoomInfo(r){return buildRooms(currentHotel)[r]||{type:'',nosmoking:false,floor:''};}
 function getAllRooms(){const r=[];FLOORS[currentHotel].forEach(f=>f.rooms.forEach(rm=>r.push(rm)));return r;}
-function hasSale(s){if(s.cancelled)return false;const hasDodo=s.pays.some(p=>p.type==='도도포인트');const hasAmt=s.pays.some(p=>Number(p.amt||0)>0);return hasAmt||hasDodo;}
+function hasSale(s){if(s.cancelled)return false;const isStaff=s.pays.some(p=>p.type==='직원숙소');if(isStaff)return false;const hasDodo=s.pays.some(p=>p.type==='도도포인트');const hasJanggi=s.pays.some(p=>p.type==='장기방');const hasAmt=s.pays.some(p=>Number(p.amt||0)>0);return hasAmt||hasDodo||hasJanggi;}
 function populateRoomSelects(){
   const rooms=getAllRooms();
   ['note-room-sel','claim-room-sel'].forEach(id=>{
@@ -584,7 +588,7 @@ function saveEditedSales(){
   editSales.forEach((s,si)=>{
     s.pays.forEach((p,pi)=>{
       if(!p.type){hasError=true;const rows=document.querySelectorAll(`#eb-${si} .pay-row`);if(rows[pi]){const sel=rows[pi].querySelector('select');if(sel){sel.style.border='2px solid #EF4444';sel.focus();}}}
-      else if(p.type!=='도도포인트'&&Number(p.amt||0)<=0){hasError=true;const rows=document.querySelectorAll(`#eb-${si} .pay-row`);if(rows[pi]){const inp=rows[pi].querySelector('input[type=text]');if(inp){inp.style.border='2px solid #EF4444';inp.focus();}}}
+      else if(!['도도포인트','장기방','직원숙소'].includes(p.type)&&Number(p.amt||0)<=0){hasError=true;const rows=document.querySelectorAll(`#eb-${si} .pay-row`);if(rows[pi]){const inp=rows[pi].querySelector('input[type=text]');if(inp){inp.style.border='2px solid #EF4444';inp.focus();}}}
     });
   });
   if(hasError){alert('결제수단과 금액을 확인해주세요. (도도포인트는 금액 없이 가능)');return;}
@@ -638,6 +642,8 @@ function updateFinalSummary(){
     {label:'통장',val:totals['통장']||0,cls:'',vc:'통장'},
     ...(currentHotel==='랜드호텔'?[{label:'도도포인트',val:totals['도도포인트']||0,cls:'',vc:'도도포인트'}]:[]),
     {label:'미수금',val:totals['미수금']||0,cls:'',vc:'미수금'},
+    {label:'장기방',val:totals['장기방']||0,cls:'',vc:'장기방'},
+    ...(currentHotel==='랜드호텔'?[{label:'직원숙소',val:totals['직원숙소']||0,cls:'',vc:'직원숙소'}]:[]),
     {label:'기타',val:etcTotal,cls:'',vc:'기타'},
     {label:'지출 (현금)',val:exp.cash,cls:'fs-expense',vc:'red'},{label:'지출 (카드)',val:exp.card,cls:'fs-expense',vc:'red'},
     {label:'현금잔액',val:cashBalance,cls:'fs-balance',vc:cashBalance>=0?'green':'red'},
