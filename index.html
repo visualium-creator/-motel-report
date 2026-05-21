@@ -185,7 +185,6 @@ input,select,textarea,button{font-family:inherit}
 .exp-item-name{color:var(--text);font-weight:500}
 .exp-item-amt{color:var(--text);font-weight:600}
 .sale-car{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px;margin-top:4px;line-height:1}
-.nc-input-area.locked{opacity:.45;pointer-events:none;user-select:none}
 </style>
 
 <div class="pw-overlay" id="pw-overlay">
@@ -389,7 +388,7 @@ function isFutureDate(){return getDate()>todayStr;}
 function ensureData(){const db=loadDb();const k=getKey();if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};saveDb(db);return db[k];}
 function getData(){const db=loadDb();const k=getKey();if(!db[k])return ensureData();return db[k];}
 function fmt(n){return Number(n||0).toLocaleString();}
-function newSale(){return{pays:[{type:'',amt:''}],guest:'',car:'',checkin:'11:00',restay:false,claim:'',note:'',cancelled:false,cancelReason:'',cancelledAt:'',savedAt:''};}
+function newSale(){return{pays:[{type:'',amt:''}],guest:'',car:'',checkin:'11:00',restay:false,cancelled:false,cancelReason:'',cancelledAt:'',savedAt:''};}
 function nowStr(){const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
 function getRoomInfo(r){return buildRooms(currentHotel)[r]||{type:'',nosmoking:false,floor:''};}
 function getAllRooms(){const r=[];FLOORS[currentHotel].forEach(f=>f.rooms.forEach(rm=>r.push(rm)));return r;}
@@ -408,7 +407,7 @@ function applyLockUI(){
   else banner.classList.remove('show');
   ['s-am','s-day','s-night'].forEach(id=>document.getElementById(id).disabled=LOCKED);
   document.getElementById('add-exp-btn').disabled=LOCKED;
-  const expArea=document.getElementById('exp-input-area');if(expArea){LOCKED?expArea.classList.add('locked'):expArea.classList.remove('locked');}if(document.getElementById('add-exp-btn'))document.getElementById('add-exp-btn').disabled=LOCKED;
+  const expArea=document.getElementById('exp-input-area');if(expArea){LOCKED?expArea.classList.add('locked'):expArea.classList.remove('locked');}
   ['note-input-area','claim-input-area'].forEach(id=>{const el=document.getElementById(id);LOCKED?el.classList.add('locked'):el.classList.remove('locked');});
   const btn=document.getElementById('btn-submit'),status=document.getElementById('submit-status'),info=document.getElementById('submit-info');
   document.getElementById('submit-title').textContent=`${currentHotel} ${getDate()} 보고서 제출`;
@@ -441,7 +440,6 @@ function renderExpenses(){
     return '<div class="exp-item"><div class="exp-item-left"><span class="exp-item-name">'+(e.name||'(항목)')+'</span>'+typeChip+'</div><div style="display:flex;align-items:center;gap:8px"><span class="exp-item-amt">'+Number(e.amt||0).toLocaleString()+'원</span>'+delBtn+'</div></div>';
   }).join('');
 }
-function addExpense(){if(LOCKED)return;}
 function addExpenseItem(){
   if(LOCKED)return;
   const name=document.getElementById('exp-name-input').value.trim();
@@ -520,7 +518,7 @@ function renderViewMode(){
       </div>`;
     body.appendChild(card);
     const sv=document.getElementById('sv-'+si);
-    const rows=[['결제',s.pays.map(p=>`${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt)+'원':'(포인트 투숙)'}`).join(' / ')],s.guest?['투숙객',s.guest]:null,s.car?['차량번호',s.car]:null,['체크인',s.checkin],s.restay?['재숙','✓']:null,s.claim?['클레임',s.claim]:null,s.note?['특이사항',s.note]:null].filter(Boolean);
+    const rows=[['결제',s.pays.map(p=>`${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt)+'원':'(포인트 투숙)'}`).join(' / ')],s.guest?['투숙객',s.guest]:null,s.car?['차량번호',s.car]:null,['체크인',s.checkin],s.restay?['재숙','✓']:null].filter(Boolean);
     sv.innerHTML=rows.map(([k,v])=>`<div class="saved-row"><span>${k}</span><span>${v}</span></div>`).join('');
   });
   if(!LOCKED){const btns=document.createElement('div');btns.className='modal-btns';btns.innerHTML=`<button class="btn btn-add-sale" onclick="addNewSale()">+ 재판매 추가</button>`;body.appendChild(btns);}
@@ -574,9 +572,7 @@ function renderEditMode(){
         <div class="fg"><label>차량번호</label><input type="text" value="${s.car||''}" placeholder="" oninput="editSales[${si}].car=this.value"></div>
       </div>
       <div class="fg"><label>체크인 시간</label><select id="ck-${si}" onchange="editSales[${si}].checkin=this.value"></select></div>
-      <div class="cb-row"><label><input type="checkbox" ${s.restay?'checked':''} onchange="editSales[${si}].restay=this.checked"> 재숙</label></div>
-      <div class="fg"><label>클레임</label><textarea placeholder="" oninput="editSales[${si}].claim=this.value">${s.claim||''}</textarea></div>
-      <div class="fg"><label>특이사항</label><textarea placeholder="" oninput="editSales[${si}].note=this.value">${s.note||''}</textarea></div>`;
+      <div class="cb-row"><label><input type="checkbox" ${s.restay?'checked':''} onchange="editSales[${si}].restay=this.checked"> 재숙</label></div>`;
     eb.appendChild(rest);
     (function(){
       var sel=document.getElementById('ck-'+si);
@@ -618,7 +614,7 @@ function openCancelModal(roomId,saleIdx){
 function closeCancelModal(){document.getElementById('cancel-modal').classList.remove('show');}
 function confirmCancel(){
   if(LOCKED)return;const reason=document.getElementById('cancel-reason').value.trim();if(!reason){alert('취소 사유를 입력해주세요.');return;}
-  const{roomId,saleIdx}=pendingCancel;const s=getData().rooms[roomId][saleIdx];
+  const{roomId,saleIdx}=pendingCancel;
   const dbC=loadDb();const kC=getKey();dbC[kC].rooms[roomId][saleIdx].cancelled=true;dbC[kC].rooms[roomId][saleIdx].cancelReason=reason;dbC[kC].rooms[roomId][saleIdx].cancelledAt=nowStr();saveDb(dbC);
   closeCancelModal();renderViewMode();renderFloors();updateFinalSummary();renderNotesClaims();
 }
@@ -700,7 +696,7 @@ function showHistory(){
   content.innerHTML=cancelled.length===0?'<p style="font-size:13px;color:#6B7280;text-align:center;padding:1rem">취소 내역이 없습니다.</p>'
     :cancelled.map(c=>{const tot=c.pays.reduce((a,p)=>a+Number(p.amt||0),0);const chips=c.pays.map(p=>`<span class="chip chip-${p.type.replace(/\s/g,'')}">${p.type}${Number(p.amt||0)>0?' '+fmt(p.amt):''}</span>`).join(' ');
       return `<div class="hist-item hist-cancelled"><div class="hist-row"><span><b>${c.rid}호</b></span><span class="cancelled-badge">취소</span></div>
-        <div class="hist-price">${tot>0?fmt(tot)+'원':s.pays.some(p=>p.type==='직원숙소')?'직원숙소':s.pays.some(p=>p.type==='장기방')?'장기방':s.pays.some(p=>p.type==='서비스')?'서비스':'포인트 투숙'}</div><div style="font-size:11px;margin:3px 0">${chips}</div>
+        <div class="hist-price">${tot>0?fmt(tot)+'원':c.pays.some(p=>p.type==='직원숙소')?'직원숙소':c.pays.some(p=>p.type==='장기방')?'장기방':c.pays.some(p=>p.type==='서비스')?'서비스':'포인트 투숙'}</div><div style="font-size:11px;margin:3px 0">${chips}</div>
         <div style="font-size:11px;color:#6B7280">투숙객: ${c.guest||'-'}${c.car?' | 차번호: '+c.car:''} | 취소: ${c.cancelledAt||'-'}</div>
         <div style="font-size:11px;color:#991B1B;margin-top:3px">사유: ${c.cancelReason||'-'}</div></div>`;}).join('');
   document.getElementById('hist-modal').classList.add('show');
