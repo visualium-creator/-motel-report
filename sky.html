@@ -1,4 +1,3 @@
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -302,26 +301,121 @@ checkAuth();
 
 function buildRooms(hotel){
   const R={};
-  // 10층 - 스위트/더블 (흡연)
-  ['1001','1002','1003'].forEach(r=>R[r]={type:'스위트',nosmoking:false,floor:'10층'});
-  ['1005','1006','1007'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'10층'});
-  // 9층 - 트윈/온돌
-  ['901','902','903','907','908','909'].forEach(r=>R[r]={type:'트윈',nosmoking:false,floor:'9층'});
-  ['905','906'].forEach(r=>R[r]={type:'온돌',nosmoking:false,floor:'9층'});
-  // 8층 - 더블
-  ['801','802','803','805','806','807','808','809'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'8층'});
-  // 7층 - 더블
-  ['701','702','703','705','706','707','708','709'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'7층'});
-  // 6층 - 트윈 (금연)
-  ['601','602','603','605','606','607','608','609'].forEach(r=>R[r]={type:'트윈',nosmoking:true,floor:'6층'});
-  // 5층 - 더블 (금연)
-  ['501','502','503','505','506','507','508','509'].forEach(r=>R[r]={type:'더블',nosmoking:true,floor:'5층'});
-  // 4층 - 더블
-  ['401','402','403','405','406','407','408','409'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'4층'});
-  // 3층 - 더블
-  ['301','302','303','305','306','307','308','309'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'3층'});
+  if(hotel==='스마트호텔'){
+    ['P101','P102','P103'].forEach(r=>R[r]={type:'트윈',nosmoking:false,floor:'11층'});
+    R['P105']={type:'킹',nosmoking:false,floor:'11층'};
+    ['P106','P107'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'11층'});
+    R['102']={type:'스위트',nosmoking:false,floor:'11층'};
+    ['1001','1002','1003'].forEach(r=>R[r]={type:'트윈',nosmoking:false,floor:'10층'});
+    R['1005']={type:'킹',nosmoking:false,floor:'10층'};
+    ['1006','1007'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'10층'});
+    R['103']={type:'스위트',nosmoking:false,floor:'10층'};
+    [9,8,7].forEach(fl=>{
+      [`${fl}01`,`${fl}02`,`${fl}03`].forEach(r=>R[r]={type:'트윈',nosmoking:false,floor:`${fl}층`});
+      R[`${fl}05`]={type:'킹',nosmoking:false,floor:`${fl}층`};
+      [`${fl}06`,`${fl}07`].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:`${fl}층`});
+    });
+    ['601','602','603'].forEach(r=>R[r]={type:'킹더블',nosmoking:false,floor:'6층'});
+    R['605']={type:'킹',nosmoking:false,floor:'6층'};
+    ['606','607'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'6층'});
+    ['501','502','503'].forEach(r=>R[r]={type:'킹더블',nosmoking:false,floor:'5층'});
+    R['505']={type:'킹',nosmoking:false,floor:'5층'};
+    ['506','507'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'5층'});
+    ['401','402','403'].forEach(r=>R[r]={type:'킹더블',nosmoking:true,floor:'4층'});
+    R['405']={type:'킹',nosmoking:true,floor:'4층'};
+    ['406','407'].forEach(r=>R[r]={type:'더블',nosmoking:true,floor:'4층'});
+    ['301','302','303'].forEach(r=>R[r]={type:'트윈',nosmoking:true,floor:'3층'});
+    R['305']={type:'킹',nosmoking:true,floor:'3층'};
+    ['306','307'].forEach(r=>R[r]={type:'더블',nosmoking:true,floor:'3층'});
+    ['201','202','203'].forEach(r=>R[r]={type:'트윈',nosmoking:true,floor:'2층'});
+    R['205']={type:'킹',nosmoking:true,floor:'2층'};
+    ['206','207'].forEach(r=>R[r]={type:'더블',nosmoking:true,floor:'2층'});
+  } else {
+    ['1001','1002','1003','1005','1006','1007','1008','1009','1010'].forEach(r=>R[r]={type:'더블',nosmoking:true,floor:'10층'});
+    R['1011']={type:'PH',nosmoking:false,floor:'10층'};
+    ['901','902','903','905','906','907','908','909','910'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'9층'});
+    R['101']={type:'S',nosmoking:false,floor:'9층'};
+    ['801','802','803','805','806','807','808','809','810'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'8층'});
+    R['102']={type:'S',nosmoking:false,floor:'8층'};
+    ['701','702','703','705','706','707','708','709','710'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'7층'});
+    R['103']={type:'S',nosmoking:false,floor:'7층'};
+    ['601','602','603','605','606','607','608','609','610'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'6층'});
+    R['105']={type:'S',nosmoking:false,floor:'6층'};
+    ['501','502','503','505','506','507','508','509','510','511'].forEach(r=>R[r]={type:'더블',nosmoking:true,floor:'5층'});
+    ['401','402','403','405','406','407','408','409','410','411'].forEach(r=>R[r]={type:'온돌',nosmoking:false,floor:'4층'});
+    ['301','302','303','305','306','307','308','309','310','311'].forEach(r=>R[r]={type:'트윈',nosmoking:false,floor:'3층'});
+    ['201','202','203','205','206','207','208','209','210','211'].forEach(r=>R[r]={type:'트윈',nosmoking:false,floor:'2층'});
+  }
+  if(hotel==='스카이호텔'){
+    ['1001','1002','1003'].forEach(r=>R[r]={type:'스위트',nosmoking:false,floor:'10층'});
+    ['1005','1006','1007'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'10층'});
+    ['901','902','903','907','908','909'].forEach(r=>R[r]={type:'트윈',nosmoking:false,floor:'9층'});
+    ['905','906'].forEach(r=>R[r]={type:'온돌',nosmoking:false,floor:'9층'});
+    ['801','802','803','805','806','807','808','809'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'8층'});
+    ['701','702','703','705','706','707','708','709'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'7층'});
+    ['601','602','603','605','606','607','608','609'].forEach(r=>R[r]={type:'트윈',nosmoking:true,floor:'6층'});
+    ['501','502','503','505','506','507','508','509'].forEach(r=>R[r]={type:'더블',nosmoking:true,floor:'5층'});
+    ['401','402','403','405','406','407','408','409'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'4층'});
+    ['301','302','303','305','306','307','308','309'].forEach(r=>R[r]={type:'더블',nosmoking:false,floor:'3층'});
+  }
   return R;
 }
+const FLOORS={
+  '스마트호텔':[
+    {label:'11층',rooms:['P101','P102','P103','P105','P106','P107','102'],wide:false},
+    {label:'10층',rooms:['1001','1002','1003','1005','1006','1007','103'],wide:false},
+    {label:'9층',rooms:['901','902','903','905','906','907'],wide:false},
+    {label:'8층',rooms:['801','802','803','805','806','807'],wide:false},
+    {label:'7층',rooms:['701','702','703','705','706','707'],wide:false},
+    {label:'6층',rooms:['601','602','603','605','606','607'],wide:false},
+    {label:'5층',rooms:['501','502','503','505','506','507'],wide:false},
+    {label:'4층 (금연)',rooms:['401','402','403','405','406','407'],wide:false},
+    {label:'3층 (금연)',rooms:['301','302','303','305','306','307'],wide:false},
+    {label:'2층 (금연)',rooms:['201','202','203','205','206','207'],wide:false},
+  ],
+  '랜드호텔':[
+    {label:'10층',rooms:['1001','1002','1003','1005','1006','1007','1008','1009','1010','1011'],wide:true},
+    {label:'9층',rooms:['901','902','903','905','906','907','908','909','910','101'],wide:true},
+    {label:'8층',rooms:['801','802','803','805','806','807','808','809','810','102'],wide:true},
+    {label:'7층',rooms:['701','702','703','705','706','707','708','709','710','103'],wide:true},
+    {label:'6층',rooms:['601','602','603','605','606','607','608','609','610','105'],wide:true},
+    {label:'5층 (금연)',rooms:['501','502','503','505','506','507','508','509','510','511'],wide:true},
+    {label:'4층',rooms:['401','402','403','405','406','407','408','409','410','411'],wide:true},
+    {label:'3층',rooms:['301','302','303','305','306','307','308','309','310','311'],wide:true},
+    {label:'2층',rooms:['201','202','203','205','206','207','208','209','210','211'],wide:true},
+  ],
+  '스카이호텔':[
+    {label:'10층',rooms:['1001','1002','1003','1005','1006','1007'],wide:true},
+    {label:'9층',rooms:['901','902','903','905','906','907','908','909'],wide:true},
+    {label:'8층',rooms:['801','802','803','805','806','807','808','809'],wide:true},
+    {label:'7층',rooms:['701','702','703','705','706','707','708','709'],wide:true},
+    {label:'6층 (금연)',rooms:['601','602','603','605','606','607','608','609'],wide:true},
+    {label:'5층 (금연)',rooms:['501','502','503','505','506','507','508','509'],wide:true},
+    {label:'4층',rooms:['401','402','403','405','406','407','408','409'],wide:true},
+    {label:'3층',rooms:['301','302','303','305','306','307','308','309'],wide:true},
+  ]
+};
+
+const PAYS={
+  '스마트호텔':['현금','카드','NOL','여기어때','통장','미수금','장기방','서비스','기타'],
+  '랜드호텔':['현금','카드','NOL','여기어때','통장','도도포인트','미수금','장기방','직원숙소','서비스','기타'],
+  '스카이호텔':['현금','카드','NOL','여기어때','네이버','통장','미수금','장기방','직원숙소','서비스','기타']
+};
+
+let currentHotel='스카이호텔',currentRoom=null,modalMode='edit',editSales=[],pendingCancel={};
+let LOCKED=false;
+function loadDb(){try{return JSON.parse(localStorage.getItem('skyDb')||'{}');}catch(e){return {};}}
+function saveDb(db){try{localStorage.setItem('skyDb',JSON.stringify(db));}catch(e){}}
+const today=new Date(),todayStr=today.toISOString().slice(0,10);
+document.getElementById('date-sel').value=todayStr;
+function getDate(){return document.getElementById('date-sel').value;}
+function getKey(){return getDate()+'__'+currentHotel;}
+function isFutureDate(){return getDate()>todayStr;}
+function ensureData(){const db=loadDb();const k=getKey();if(!db[k])db[k]={rooms:{},expenses:[],notes:[],claims:[],staff:{am:'',day:'',night:''},submitted:false,submittedAt:''};saveDb(db);return db[k];}
+function getData(){const db=loadDb();const k=getKey();if(!db[k])return ensureData();return db[k];}
+function fmt(n){return Number(n||0).toLocaleString();}
+function newSale(){return{pays:[{type:'',amt:''}],guest:'',car:'',checkin:'11:00',restay:false,claim:'',note:'',cancelled:false,cancelReason:'',cancelledAt:'',savedAt:''};}
+function nowStr(){const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
 function getRoomInfo(r){return buildRooms(currentHotel)[r]||{type:'',nosmoking:false,floor:''};}
 function getAllRooms(){const r=[];FLOORS[currentHotel].forEach(f=>f.rooms.forEach(rm=>r.push(rm)));return r;}
 function hasSale(s){if(s.cancelled)return false;const isStaff=s.pays.some(p=>p.type==='직원숙소');if(isStaff)return false;const hasDodo=s.pays.some(p=>p.type==='도도포인트');const hasJanggi=s.pays.some(p=>p.type==='장기방');const hasService=s.pays.some(p=>p.type==='서비스');const hasAmt=s.pays.some(p=>Number(p.amt||0)>0);return hasAmt||hasDodo||hasJanggi||hasService;}
@@ -504,6 +598,7 @@ function updateFinalSummary(){
     {label:'여기어때',val:totals['여기어때']||0,cls:'',vc:'여기어때'},
     {label:'네이버',val:totals['네이버']||0,cls:'',vc:'네이버'},
     {label:'통장',val:totals['통장']||0,cls:'',vc:'통장'},
+
     {label:'미수금',val:totals['미수금']||0,cls:'',vc:'미수금'},
     {label:'장기방',val:totals['장기방']||0,cls:'',vc:'장기방'},
     {label:'직원숙소',val:totals['직원숙소']||0,cls:'',vc:'직원숙소'},
