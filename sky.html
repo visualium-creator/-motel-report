@@ -201,17 +201,14 @@ input,select,textarea,button{font-family:inherit}
 </div>
 
 <div class="wrap">
-  <div class="page-title">랜드+스마트 일일보고서</div>
+  <div class="page-title">스카이호텔 일일보고서</div>
   <div class="header">
     <span class="header-label">일일 보고서</span>
     <input type="date" class="ctrl" id="date-sel">
     <button class="btn" style="flex:none;padding:5px 11px;font-size:12px" onclick="showHistory()">결제취소 내역</button>
   </div>
   <div class="locked-banner" id="locked-banner">🔒 <span id="locked-msg">제출 완료된 보고서입니다. 조회만 가능합니다.</span></div>
-  <div class="tabs">
-    <button class="tab-btn land-active" id="tab-land" onclick="switchTab('랜드호텔')">랜드호텔</button>
-    <button class="tab-btn" id="tab-smart" onclick="switchTab('스마트호텔')">스마트호텔</button>
-  </div>
+  
   <div class="staff-row">
     <div class="staff-item" style="display:none"><span>오전</span><input type="text" id="s-am" placeholder=""></div>
     <div class="staff-item"><span>주간</span><input type="text" id="s-day" placeholder=""></div>
