@@ -686,7 +686,7 @@ async function submitReport(){
   btn.disabled=true;btn.textContent='전송 중...';
   const roomsWithInfo={};
   Object.entries(d.rooms).forEach(([rid,sales])=>{const info=getRoomInfo(rid);roomsWithInfo[rid]=sales.map(s=>({...s,type:info.type,nosmoking:info.nosmoking,floor:info.floor}));});
-  const payload={hotel:currentHotel,date:getDate(),staff:d.staff,rooms:roomsWithInfo,expenses:d.expenses||[],notes:(d.notes||[]).map(n=>({...n,source:'extra'})),claims:(d.claims||[]).map(cc=>({...cc,source:'extra'})),};
+  const payload={hotel:currentHotel,date:getDate(),staff:d.staff,rooms:roomsWithInfo,expenses:d.expenses||[],notes:(d.notes||[]),claims:(d.claims||[]),};
   try{
     const res=await fetch('https://motel-report.visualium.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const result=await res.json();
