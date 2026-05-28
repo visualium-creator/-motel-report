@@ -842,14 +842,14 @@ function renderEditMode(){
         editSales[si].pays[pi].type=this.value;
         this.style.border=this.value?'1px solid #D1D5DB':'2px solid #EF4444';
         const amtEl=row.querySelector('input[type=text]');
-        if(this.value==='예약'){if(amtEl){amtEl.disabled=true;amtEl.style.opacity='.4';amtEl.value='0';editSales[si].pays[pi].amt=0;}}
+        if(this.value==='예약'||this.value==='도도포인트'){if(amtEl){amtEl.disabled=true;amtEl.style.opacity='.4';amtEl.value='0';editSales[si].pays[pi].amt=0;}}
         else{if(amtEl){amtEl.disabled=false;amtEl.style.opacity='1';}}
 
         updateEditTotal(si);
       });
       const amt=document.createElement('input');amt.type='text';amt.inputMode='numeric';amt.placeholder='금액';
       amt.value=p.amt||'';
-      if(p.type==='예약'){amt.disabled=true;amt.style.opacity='.4';amt.value='0';}
+      if(p.type==='예약'||p.type==='도도포인트'){amt.disabled=true;amt.style.opacity='.4';amt.value='0';}
 
       amt.style.cssText='flex:1;font-size:13px;padding:5px 7px;border-radius:6px;border:1px solid #D1D5DB;background:#fff;color:#111';
       amt.addEventListener('input',function(){const raw=this.value.replace(/[^0-9]/g,'');this.value=raw;editSales[si].pays[pi].amt=raw?Number(raw):0;updateEditTotal(si);});
@@ -913,7 +913,7 @@ function saveEditedSales(){
     editSales.forEach((s,si)=>{
       s.pays.forEach((p,pi)=>{
         if(!p.type){hasError=true;const rows=document.querySelectorAll('#eb-'+si+' .pay-row');if(rows[pi]){const sel=rows[pi].querySelector('select');if(sel){sel.style.border='2px solid #EF4444';sel.focus();}}}
-        else if(!['장기방','직원숙소','서비스'].includes(p.type)&&Number(p.amt||0)<=0){hasError=true;const rows=document.querySelectorAll('#eb-'+si+' .pay-row');if(rows[pi]){const inp=rows[pi].querySelector('input[type=text]');if(inp){inp.style.border='2px solid #EF4444';inp.focus();}}}
+        else if(!['장기방','직원숙소','서비스','도도포인트'].includes(p.type)&&Number(p.amt||0)<=0){hasError=true;const rows=document.querySelectorAll('#eb-'+si+' .pay-row');if(rows[pi]){const inp=rows[pi].querySelector('input[type=text]');if(inp){inp.style.border='2px solid #EF4444';inp.focus();}}}
       });
     });
     if(hasError){alert('결제수단과 금액을 확인해주세요.');return;}
