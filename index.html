@@ -987,9 +987,9 @@ function updateFinalSummary(){
     });
   });
   const exp=getExpTotals();const cashBalance=(totals['현금']||0)-exp.cash;
-  function cnt(type){const c=counts[type]||0;return c>0?c+'실':'-';}
+  function cnt(type){if(type==='_total')return count>0?count+'실':'-';const c=counts[type]||0;return c>0?c+'실':'-';}
   const rows=[
-    {label:'총 매출 <span style="font-size:11px;font-weight:400">('+count+'실)</span>',val:grandTotal,cls:'fs-total',vc:'green'},
+    {label:'총 매출',countKey:'_total',val:grandTotal,cls:'fs-total',vc:'green'},
     {label:'현금',countKey:'현금',val:totals['현금']||0,cls:'',vc:'현금'},
     {label:'카드',countKey:'카드',val:totals['카드']||0,cls:'',vc:'카드'},
     {label:'NOL',countKey:'NOL',val:totals['NOL']||0,cls:'',vc:'NOL'},
