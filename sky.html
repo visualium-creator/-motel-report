@@ -68,7 +68,7 @@ input,select,textarea,button{font-family:inherit}
 .chip-예약{background:#FEF3C7;color:#92400E}
 .chip-사전결제{background:#FEF9C3;color:#854F0B}
 .empty-room{height:58px}
-.section-title{font-size:11px;font-weight:700;color:var(--text3);margin:1rem 0 5px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);padding-bottom:3px}
+.section-title{font-size:11px;font-weight:700;color:var(--text3);margin:1rem 0 5px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);padding-bottom:3px;text-align:center}
 .exp-wrap{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px}
 .exp-row{display:grid;grid-template-columns:2fr 1.2fr 1fr auto;gap:6px;align-items:center;margin-bottom:5px}
 .exp-row input,.exp-row select{font-size:12px;padding:5px 7px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--text);width:100%}
@@ -94,14 +94,14 @@ input,select,textarea,button{font-family:inherit}
 .nc-text{flex:1;color:var(--text);line-height:1.5}
 .nc-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:0 2px}
 .empty-nc{font-size:11px;color:var(--text3);padding:10px 4px;text-align:center}
-.final-summary{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:.5rem;width:380px;margin-left:auto;margin-right:auto}
-.fs-row{display:flex;justify-content:center;gap:48px;align-items:center;padding:7px 14px;border-bottom:1px solid var(--border);font-size:13px}
+.final-summary{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:.5rem;width:460px;margin-left:auto;margin-right:auto}
+.fs-row{display:flex;justify-content:center;gap:12px;align-items:center;padding:7px 14px;border-bottom:1px solid var(--border);font-size:13px}
 .fs-row:last-child{border-bottom:none}
 .fs-row.fs-total{background:var(--bg2);font-weight:600}
 .fs-row.fs-expense{background:#FEF2F2}
 .fs-row.fs-balance{background:var(--green-bg);font-weight:600}
-.fs-label{color:var(--text3);font-size:12px;width:120px;text-align:right;flex-shrink:0}
-.fs-val{font-weight:600;color:var(--text);font-size:13px;width:130px;text-align:left;flex-shrink:0}
+.fs-label{color:var(--text3);font-size:12px;width:100px;text-align:right;flex-shrink:0}
+.fs-count{font-weight:600;color:var(--text3);font-size:13px;width:40px;text-align:center;flex-shrink:0}.fs-val{font-weight:600;color:var(--text);font-size:13px;width:110px;text-align:left;flex-shrink:0}
 .fs-val.현금{color:#1A1A18}.fs-val.카드{color:#CC0000}.fs-val.NOL{color:#0066CC}.fs-val.여기어때{color:#FF2B4A}
 .fs-val.통장{color:#5B21B6}.fs-val.미수금{color:#A32D2D}
 .fs-val.장기방{color:#166534}.fs-val.직원숙소{color:#475569}.fs-val.기타{color:#4B4A47}
@@ -903,33 +903,34 @@ function getExpTotals(){
   return{cash,card};
 }
 function updateFinalSummary(){
-  const d=getData(),totals={};let grandTotal=0,count=0;
+  const d=getData(),totals={},counts={};let grandTotal=0,count=0;
   Object.values(d.rooms).forEach(sales=>{
     sales.forEach(s=>{
       if(s.cancelled||isReservation(s))return;
-      s.pays.forEach(p=>{const amt=Number(p.amt||0);if(!amt)return;totals[p.type]=(totals[p.type]||0)+amt;grandTotal+=amt;});
+      s.pays.forEach(p=>{const amt=Number(p.amt||0);if(amt){totals[p.type]=(totals[p.type]||0)+amt;grandTotal+=amt;counts[p.type]=(counts[p.type]||0)+1;}});
       if(hasSale(s))count++;
     });
   });
   const exp=getExpTotals();const cashBalance=(totals['현금']||0)-exp.cash;
+  function cnt(type){if(type==='_total')return count>0?count+'실':'-';const c=counts[type]||0;return c>0?c+'실':'-';}
   const rows=[
-    {label:'총 매출 <span style="font-size:11px;font-weight:400">('+count+'실)</span>',val:grandTotal,cls:'fs-total',vc:'green'},
-    {label:'현금',val:totals['현금']||0,cls:'',vc:'현금'},
-    {label:'카드',val:totals['카드']||0,cls:'',vc:'카드'},
-    {label:'NOL',val:totals['NOL']||0,cls:'',vc:'NOL'},
-    {label:'여기어때',val:totals['여기어때']||0,cls:'',vc:'여기어때'},
-    {label:'네이버',val:totals['네이버']||0,cls:'',vc:'네이버'},
-    {label:'통장',val:totals['통장']||0,cls:'',vc:'통장'},
-    {label:'미수금',val:totals['미수금']||0,cls:'',vc:'미수금'},
-    {label:'장기방',val:totals['장기방']||0,cls:'',vc:'장기방'},
-    {label:'직원숙소',val:totals['직원숙소']||0,cls:'',vc:'직원숙소'},
-    {label:'서비스',val:totals['서비스']||0,cls:'',vc:'서비스'},
-    {label:'기타',val:totals['기타']||0,cls:'',vc:'기타'},
+    {label:'총 매출',countKey:'_total',val:grandTotal,cls:'fs-total',vc:'green'},
+    {label:'현금',countKey:'현금',val:totals['현금']||0,cls:'',vc:'현금'},
+    {label:'카드',countKey:'카드',val:totals['카드']||0,cls:'',vc:'카드'},
+    {label:'NOL',countKey:'NOL',val:totals['NOL']||0,cls:'',vc:'NOL'},
+    {label:'여기어때',countKey:'여기어때',val:totals['여기어때']||0,cls:'',vc:'여기어때'},
+    {label:'네이버',countKey:'네이버',val:totals['네이버']||0,cls:'',vc:'네이버'},
+    {label:'통장',countKey:'통장',val:totals['통장']||0,cls:'',vc:'통장'},
+    {label:'미수금',countKey:'미수금',val:totals['미수금']||0,cls:'',vc:'미수금'},
+    {label:'장기방',countKey:'장기방',val:totals['장기방']||0,cls:'',vc:'장기방'},
+    {label:'직원숙소',countKey:'직원숙소',val:totals['직원숙소']||0,cls:'',vc:'직원숙소'},
+    {label:'서비스',countKey:'서비스',val:totals['서비스']||0,cls:'',vc:'서비스'},
+    {label:'기타',countKey:'기타',val:totals['기타']||0,cls:'',vc:'기타'},
     {label:'지출 (현금)',val:exp.cash,cls:'fs-expense',vc:'red'},
     {label:'지출 (카드)',val:exp.card,cls:'fs-expense',vc:'red'},
     {label:'현금잔액',val:cashBalance,cls:'fs-balance',vc:cashBalance>=0?'green':'red'},
   ];
-  document.getElementById('final-summary').innerHTML=rows.map(r=>'<div class="fs-row '+r.cls+'"><span class="fs-label">'+r.label+'</span><span class="fs-val '+r.vc+'">'+fmt(r.val)+'원</span></div>').join('');
+  document.getElementById('final-summary').innerHTML=rows.map(r=>'<div class="fs-row '+r.cls+'"><span class="fs-label">'+r.label+'</span><span class="fs-count">'+(r.countKey?cnt(r.countKey):'')+'</span><span class="fs-val '+r.vc+'">'+fmt(r.val)+'원</span></div>').join('');
 }
 function renderNotesClaims(){
   const d=getData(),rn=[],rc=[];
